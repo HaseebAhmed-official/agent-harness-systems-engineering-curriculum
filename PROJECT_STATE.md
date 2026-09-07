@@ -61,6 +61,8 @@ User study environment:
 
 ## Current Baseline
 
+Latest verified implementation: `9706d44` passed all 63 tests from a clean WSL archive on Python 3.13.9 in 6.995 seconds, using offline locked exact dependencies. Its separate CLI run passed all 20 contracts with the same hash as Windows. This completes the corpus clean-validation step referenced below; next work is representative task/provider evaluation, manually reviewed graders/leakage, source freshness, and delivery/independent learner evidence. Three existing upstream A2A warnings remain. The full temporary report is `/tmp/harness-9706d44.A9dGoQ/corpus-report.json`; regenerate from the commit if unavailable. This is instructor execution, not independent learner reproduction.
+
 2026-09-07 maintained corpus milestone: the reference harness now includes a versioned 20-task deterministic contract corpus across six families, 10 development/10 public challenge tasks, a strict runner with trace plus independent fixture-state grading, corpus hashing, duplicate/split checks, measured local execution times, and a separately tested Wilson interval exercise. All 63 exact-dependency tests passed on Windows Python 3.13.1 in 9.081 seconds, and the CLI passed 20/20 contracts. Ruff, MyPy (20 source/test files), Bandit on source, and whitespace checks passed. LAB-C7 now includes runnable instructions, attack/mutation controls, leakage limits, uncertainty assumptions, source rationale, and required real-workload extensions. This closes the absence of a maintained bounded contract corpus, but does not establish representative model evaluation, independent grader calibration, general leakage detection, or learning effectiveness. Clean WSL validation of this milestone remains pending; prior 50-test clean evidence below remains historical.
 
 Clean security validation recorded 2026-09-06: commit `b2a0221` passed all 48 tests from a fresh WSL Git archive, with CPython 3.13.9 and the committed optional-dependency lock. Test time was 6.949 seconds, excluding downloads/setup; three known A2A protobuf warnings remain. This supersedes the worktree-only security checkpoint below. It is author-executed evidence, not independent lab reproduction.
@@ -204,7 +206,7 @@ The project is complete only when every applicable gate has evidence:
 | G0 Scope and boundary | Stable outcomes, product separation, claim limits | Implemented; internal audit complete, independent audit pending |
 | G1 Source integrity | Claim-source map, versions/dates, independent spot checks | Improved but partial; current protocol and case claims rechecked internally |
 | G2 Curriculum alignment | Outcome-to-module-to-lab-to-assessment traceability | Implemented; internal structural audit passed, assessor calibration pending |
-| G3 Reference implementation | Runnable harness, tests, fixtures, documented failure modes | Partial; 50 bounded tests pass on Windows and clean WSL including optional real SDK, single-host durability, authorization, and evaluator-integrity proofs; production adapters and distributed infrastructure are absent |
+| G3 Reference implementation | Runnable harness, tests, fixtures, documented failure modes | Partial; 63 bounded tests and 20 corpus contracts pass on Windows and clean WSL including optional SDK, durability, authorization, and evaluator/corpus integrity; production adapters and distributed infrastructure are absent |
 | G4 Hands-on reproducibility | Labs executed in clean environments with expected evidence | Early; interoperability and durability starting fixtures are instructor-executed in fresh WSL, but LAB-C2/C4/C5/C8 and other labs lack independent reproduction |
 | G5 Assessment validity | Authentic tasks, oral defense, transfer, anti-outsourcing controls | Strong authored system; empirical validity pending |
 | G6 Security and governance | Threat labs, controls, privacy, change management, audits | Authored system plus an internally executed LAB-C6 authorization starting fixture; complete threat labs, operational isolation, and independent audit pending |
@@ -227,7 +229,7 @@ No completion percentage overrides a failed gate.
 
 1. Keep `../elite-mentor-os` frozen until the user explicitly resumes that product.
 2. Reproduce the critical lab path independently and preserve environment, command, output, failure, timing, and assessor evidence.
-3. Complete clean validation of the 20-task contract corpus, then add realistic task/provider evaluation, manually reviewed grader/leakage evidence, and actual memory/persistence and process/network security boundaries. The maintained deterministic corpus is a starting fixture, not a production benchmark.
+3. Add realistic task/provider evaluation, manually reviewed grader/leakage evidence, and actual memory/persistence and process/network security boundaries. Clean validation of the 20-task deterministic contract corpus is complete; it remains a starting fixture, not a production benchmark.
 4. Run accessibility and assessor-calibration audits, then repair findings.
 5. Seek independent review and pilot evidence only after the internal blockers are materially reduced.
 

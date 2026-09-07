@@ -21,7 +21,7 @@ Build a university-presentable, enterprise-relevant curriculum through which a s
 
 ## Verified Baseline
 
-- Date: 2026-09-06, Asia/Karachi; clean WSL implementation baseline is commit `1423d88` (security plus evaluator repair).
+- Date: 2026-09-07, Asia/Karachi; clean WSL implementation baseline is commit `9706d44` (security, evaluator repair, and 20-task contract corpus).
 - Platform-agnostic curriculum migration, advanced interoperability hardening, and bounded durable execution are fixed through implementation head `ac25d63`.
 - Current tree has 68 curriculum files; 15 OpenClaw references remain in intentional case/source/maintenance/comparative contexts.
 - The reference harness has a minimal runtime, bounded memory/orchestration/persistence/evaluation fixtures, a single-host SQLite durable-work fixture, and an optional exact-version MCP/A2A/OpenTelemetry lane; 34 tests pass on Windows and from a clean WSL extraction of Git archive `ac25d63`.
@@ -40,6 +40,8 @@ Build a university-presentable, enterprise-relevant curriculum through which a s
 These are planning estimates. Completion gates in `PROJECT_STATE.md` control claims.
 
 ## Current Milestone
+
+Completed clean corpus validation: archive `9706d44`, WSL `/tmp/harness-9706d44.A9dGoQ`, Python 3.13.9, offline locked exact dependencies. All 63 tests passed in 6.995 seconds; the CLI separately passed 20/20, matching Windows corpus hash `8b3bba3c763daa36b77091d89ef855e8c518e6116331e753d283e10b26074e32`. Full synthetic CLI evidence is `/tmp/harness-9706d44.A9dGoQ/corpus-report.json` (temporary, may not persist); rerun from the commit to regenerate it. Three known A2A warnings remain. This supersedes pending-validation language in the checkpoint below. Next: realistic provider/task evaluation with grader calibration and manual semantic-leakage review, then stale product-source refresh and remaining delivery/learner gates. Do not repeat the completed WSL runs. Verify Git for publication status.
 
 2026-09-07 corpus checkpoint: `evaluation-corpus.json` adds 20 original synthetic contracts in six families (10 development, 10 public challenge). `corpus.py` validates schema/duplicate JSON keys, normalized prompts, equivalent scripts including call-ID/default normalization, and declared family split overlap; grades final inventory/read/effect journals plus trace; reports hashes, timings, failures, and explicit uncertainty/cost limits. It is a deterministic contract corpus, not a representative model/workload benchmark. Thirteen additional test methods check positive/negative controls, misleading output, private-state and trace changes, infrastructure failure, metadata/leakage errors, and Wilson interval boundaries. All 63 exact-dependency tests passed on Windows Python 3.13.1 in 9.081 seconds; the corpus CLI passed 20/20 with hash `8b3bba3c763daa36b77091d89ef855e8c518e6116331e753d283e10b26074e32`. Ruff, MyPy (20 source/test files), Bandit on source, and whitespace checks passed. Clean commit-bound WSL validation of this new milestone is still pending. LAB-C7 instructions and source rationale reuse existing files. Only the corpus JSON and its runner are new files.
 
