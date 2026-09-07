@@ -26,6 +26,8 @@ It intentionally does **not** claim production readiness. It does not provide pr
 
 The basic `Policy` retains reusable exact approvals for the foundations exercise. Select `ScopedPolicy` from `agent_harness.security` explicitly for the LAB-C6 single-use approval exercise. Its host-only `approve` method must never be exposed as a model tool. Its lock protects grant consumption within one process, not concurrent access to the complete harness. Host session identity, handlers, clock, and unchanged arguments between authorization and dispatch are trusted. Tool-object binding detects replacement and schema/metadata drift; it does not attest installed code or prevent a handler from changing behavior internally. Destination strings are opaque exact allowlisted values; there is no DNS, redirect, socket, filesystem, or tenant isolation enforcement. Grants disappear on restart and are spent before dispatch even if the handler fails after a partial effect. Recovery requires reconciliation and a new host decision.
 
+[Semester 2 lesson 3](../curriculum/semester-2/teaching-guide.md#lesson-3-a-dead-worker-does-not-mean-no-effect) adds a runnable actual child-process abrupt-exit demonstration outside the test suite. It compares blind retry with single-task receipt reconciliation in disposable local files. It is not a general process-kill harness, transactional external service, power-loss test, or repair to this fixture's at-least-once behavior.
+
 Run the tests without installing dependencies:
 
 ```powershell

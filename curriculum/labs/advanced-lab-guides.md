@@ -51,6 +51,8 @@ Preserve correct, auditable state across failures and retries.
 
 Back the session/event contract with a durable store or approved workflow engine. Model transitions explicitly and inject crash before/after external side effects.
 
+Start with [Semester 2 lesson 3](../semester-2/teaching-guide.md#lesson-3-a-dead-worker-does-not-mean-no-effect): an actual trusted child-process exit after a local synthetic effect, followed by blind-retry and reconciliation controls. It does not complete this lab: the receipt file is not a transactional service, the lease clock is controlled, and real timeout/cancellation, contention, migration, and external-service evidence remain required.
+
 ### Required Tests
 
 - retryable provider timeout

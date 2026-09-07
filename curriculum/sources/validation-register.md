@@ -43,6 +43,12 @@ Track the evidence class and claim boundary for curriculum-wide claims. Product-
 
 ## Product Baselines
 
+### Semester 2 Production Foundations (2026-09-07)
+
+[Google SRE's Implementing SLOs](https://sre.google/workbook/implementing-slos/) supports user-oriented indicators, explicit measurement coverage, targets, and decision policies. The lesson's 99% target and counts are invented teaching inputs, not a recommended service target or measured performance. [Anthropic's effective-agent guidance](https://www.anthropic.com/engineering/building-effective-agents) supports a simpler baseline and distinguishes fixed workflows from model-directed control; the printed routing/sequential-fan-out example does not prove concurrent execution or model-quality improvement.
+
+[AWS's idempotent-API guidance](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/) supports caller/request identity, rejecting changed intent, atomic effect/token recording, and late-request/retention analysis. The actual child-process exercise demonstrates a local effect surviving abrupt exit and duplicate effects after blind retry; its single-task file-based reconciliation is not an implementation of AWS's transaction contract. The memory generation-check exercise demonstrates only a chosen sequential stale-publication schedule; durable concurrency, tombstone retention, and mixed-source deletion require further evidence. The four exact examples passed in Windows and WSL worktrees without live models, paid APIs, user data, or installed-product changes.
+
 ### Authorization and Diagnostic Lesson Evidence (2026-09-07)
 
 [OWASP Authorization Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) directly supports deny-default and every-request permission checks. Semester 1 lesson 11 distinguishes those requirements from the baseline's reusable argument-scoped grant and LAB-C6's trusted-host scoped controls. Human authentication, implementation identity, executor containment, and production credential handling are not proved by these examples.
