@@ -103,6 +103,8 @@ The fixture is `executed`; LAB-C4, LAB-C5, and LAB-C8 remain `authored`. No seco
 
 ## 2026-09-07 Teaching and Drift Addendum
 
+Latest teaching follow-up: lessons 1-10 are expanded; all seven exact Python examples passed on Windows Python 3.13.1. Lesson 8 supplies a formative fault matrix and assessment procedure, not an executed unseen exam. Context, attempt correlation, and SQLite reopen examples have explicit capability limits. The new source-register entry records SQLite 3.47.1 with fresh stores in delete mode; concurrent-WAL risk is not applicable to those observed modes, while other environments remain unchecked. A temporary inspection connection-cleanup error was corrected with explicit closing and rerun successfully. No runtime code changed or independent learner evidence was generated. Strong readiness verdicts remain rejected.
+
 This remains author-session review. Semester 1 lessons 1-4 gained worked instruction, public keys, prediction tasks, guided/independent practice, remediation, and evidence limits. Both exact Markdown Python blocks ran on the existing Windows Python 3.13.1 environment: `final 5 [5]` and `no_progress cancelled provider_error`. Final-response checking is distinct from independently observed handler state. LAB-C6 prerequisite labels now correctly refer to B3 typed tools, B6 policy, and B5 sessions/events.
 
 The current implemented baseline is `9706d44`: 63 bounded tests and 20 synthetic corpus contracts passed on Windows and clean WSL, as recorded in the project checkpoint. This supersedes historical lower test totals, not the incomplete-readiness verdict.

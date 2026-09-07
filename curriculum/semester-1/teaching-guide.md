@@ -232,7 +232,7 @@ Delayed check at a later session: without the worked code, change one condition 
 
 #### Delivery Evidence for Lessons 1-4
 
-These expanded lessons supply instructor explanations, public answer keys, worked examples, practice, and remediation. They do not supply measured student timing, assessor reliability, accessibility user testing, or independent learner reproduction. The executable Python examples are checked separately from prose activities; a passing code example cannot establish the effectiveness of the teaching sequence. Lessons 5-6 continue below; weeks 7-16 remain shorter outlines and need comparable delivery development.
+These expanded lessons supply instructor explanations, public answer keys, worked examples, practice, and remediation. They do not supply measured student timing, assessor reliability, accessibility user testing, or independent learner reproduction. The executable Python examples are checked separately from prose activities; a passing code example cannot establish the effectiveness of the teaching sequence. Lessons 5-10 continue below; weeks 11-16 remain shorter outlines and need comparable delivery development.
 
 Pedagogy rationale checked 2026-09-07: the [IES practice guide](https://ies.ed.gov/ncee/wwc/PracticeGuide/1) recommends spaced learning, alternating worked examples with problem solving, combining verbal and graphical explanations, retrieval, and explanatory questions. Its recommendations have different evidence ratings and populations; applying them here is a curriculum design choice requiring local learner evaluation. This guide does not establish that the lessons are equivalent to any named university's instruction.
 
@@ -366,11 +366,71 @@ Pass requires a before/after state comparison, correct distinction among denial,
 - Misconception: more context always improves output.
 - Evidence: selection rationale, token budget, truncation test, and ablation result.
 
+#### Lesson 7: What Survives the Context Budget?
+
+Entry: trace a list backwards, distinguish message roles, and explain that stored history and provider-visible input are not necessarily identical. Read `context.py` before predicting the following example. This selector keeps all system messages plus a contiguous recent suffix; it stops at the first conversation message that does not fit. Its unit is characters, not tokens or a provider request's total encoded size.
+
+```python
+from agent_harness.context import ContextBudgetError, RecentContextBuilder
+from agent_harness.contracts import Message
+
+history = [
+    Message("system", "RULE"),
+    Message("user", "KEY=blue"),
+    Message("assistant", "x" * 20),
+    Message("user", "ASK"),
+]
+small = RecentContextBuilder(12).build(history)
+assert [m.content for m in small.messages] == ["RULE", "ASK"]
+assert (small.used_characters, small.dropped_messages) == (7, 2)
+large = RecentContextBuilder(40).build(history)
+assert large.messages == tuple(history)
+assert large.used_characters == 35
+try:
+    RecentContextBuilder(3).build(history)
+except ContextBudgetError:
+    pass
+else:
+    raise AssertionError("Oversized required context silently accepted")
+assert history[1].content == "KEY=blue"
+print("Small: 7 characters, 2 dropped; large: 35, 0 dropped")
+```
+
+Prediction key: five unused characters do not let the small selector skip the long message and retrieve the older key. The original history still contains that key. Context eviction is not deletion, and keeping system-role messages does not authenticate who assigned those roles. This example proves deterministic selection only, not that a model will answer correctly with either input.
+
+Guided ablation: remove the distractor, repeat at the same budget, then raise the budget while holding the history fixed. Record selected messages, task evidence retained, and budget use. Define ablation as changing one component to test its contribution. Do not simultaneously change model, prompt, retrieval, and grader and then attribute improvement to context.
+
+Independent LAB-B4 task: compare recency with a provenance-aware retrieval policy on synthetic facts. Include an old necessary fact, newer contradiction, malicious instruction embedded in a source, and required evidence that cannot fit. Preserve source identity and explicit overflow behavior. Test tool-call/result pairing if your provider requires it; the reference selector does not implement protocol-aware grouping. Use a tokenizer appropriate to the actual adapter when claiming token limits, reserving room for instructions, tools, framing, and output.
+
+Instructor assessment: pass only when the learner can explain selected versus stored data, reject character-count-as-token-count claims, show a positive retrieval control and a deliberate missed-evidence case, and attribute results to controlled changes. A missing fact should produce explicit uncertainty, not an invented answer. Remediation: hand-pack the four messages above, then repeat with reordered evidence and a different budget.
+
+Research boundary: [Lost in the Middle](https://arxiv.org/abs/2307.03172) studied positional effects in particular 2023 models and tasks; it motivates beginning/middle/end tests, not a universal claim about all current models. [Anthropic context guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) supports selective context, compaction, and notes as engineering approaches. Neither source validates this course or proves one selector always wins. On a later session, require a changed-source ablation without the worked example and record the actual delay and assistance.
+
 ### Week 8: Midterm Trace and Debug
 
 - Use unseen code with seeded failures in at least three layers.
 - Require prediction before tests and root-cause explanation after repair.
 - Do not grade only the final passing state.
+
+#### Lesson 8: Diagnose Before Repairing
+
+Entry: independently trace Lessons 3-7, including failed validation, denied dispatch, partial effects, and dropped context. This lesson is a formative rehearsal; its public faults and keys must not become the unseen graded exam.
+
+Instructor preparation: use a disposable copy of the learner harness and introduce the three faults below separately before combining them. Preserve the clean revision and verify each seeded fault changes its intended test. Do not seed unsafe real commands or use production data. If a fault cannot be reproduced, repair the exercise before asking learners to diagnose it.
+
+| Seeded fault | First discriminating observation | Repair and regression anchor |
+| --- | --- | --- |
+| Required source fact is evicted by context selection | Inspect the provider-visible messages, not merely stored history | Retain or retrieve the authorized fact within budget; test a second fact and explicit overflow |
+| Tool schema uses an unenforced positive-quantity constraint | Zero passes validation; independent handler counter can advance | Enforce the intended constraint and test zero, negative, positive, boolean, and missing values |
+| Grader accepts a final success string after a failed side effect | Compare terminal response, tool event, and independent state | Grade outcome and state separately; include false-success and valid-success controls |
+
+Worked reasoning: "The model ignored the fact" is not supported when the fact never reached the provider. First inspect the boundary. Similarly, `final` is a conversation termination state, not an effect-success verdict. Use a hypothesis table: suspected layer, expected observation if true, discriminating test, actual observation, conclusion, and next action.
+
+Learner sequence: predict the failure before running; execute one discriminating test; localize the responsible contract; add a failing regression; make the smallest justified repair; run that regression and the unaffected controls; explain residual limits. Keep original output and the diff. Do not weaken assertions or broaden permissions just to obtain a pass.
+
+Instructor anchors: evidence-based localization, a regression that failed before repair, preservation of safety constraints, and explanation under a changed input are all required. A green suite without a root-cause explanation is insufficient. Give formative feedback as one concrete next test rather than a complete patch. Separate technical reasoning from writing fluency and typing speed; accept a text trace or accessible oral defense with equivalent evidence.
+
+For the actual midterm, use independently prepared changed faults at the same competency level and the practical-exam rubric. Calibrate two assessors on a shared anonymized sample before consequential grading; record disagreements rather than declaring reliability from identical rubrics. With a single self-study learner, label the outcome self-assessed and schedule a later changed-fault retest. Independent assessor reliability remains unmeasured.
 
 ### Week 9: Sessions and Events
 
@@ -379,12 +439,87 @@ Pass requires a before/after state comparison, correct distinction among denial,
 - Misconception: conversation history is equivalent to durable task state.
 - Evidence: schema, ordering, identity, artifact reference, and reconstruction test.
 
+#### Lesson 9: Reconstruct Attempts Without Mixing Their Evidence
+
+Entry: distinguish session ID, one execution attempt, and one tool-call identity. An event sequence provides local ordering; it is not a universal timestamp or proof that an external action happened.
+
+```python
+from agent_harness import Harness, ModelTurn, ScriptedProvider
+from agent_harness.runtime import InMemorySessionStore
+
+store = InMemorySessionStore()
+first = Harness(ScriptedProvider([ModelTurn(content="one")]), store=store).run(
+    "timeline", "First task")
+second = Harness(ScriptedProvider([ModelTurn(content="two")]), store=store).run(
+    "timeline", "Second task")
+events = store.events("timeline")
+assert first.attempt_id != second.attempt_id
+assert [e.sequence for e in events] == list(range(1, len(events) + 1))
+for run in (first, second):
+    own = tuple(e for e in events if e.attempt_id == run.attempt_id)
+    assert own == run.events
+    assert own[0].kind == "run.started"
+    assert own[-1].kind == "run.finished"
+    assert sum(e.kind == "model.requested" for e in own) == 1
+assert len([m for m in store.messages("timeline") if m.role == "user"]) == 2
+print("Two attempts; isolated run evidence; one ordered session history")
+```
+
+Instructor key: reusing the session retains history, but each run has a distinct attempt ID. Filtering only by session can attach an old success to a new failure. The per-session sequence does not establish cross-session causal order. Persisted or logged "completed" events still need correlation with external receipts/state where the outcome crosses a boundary.
+
+Guided variation: replace the second provider with an empty script. Reconstruct only the second attempt and distinguish provider failure from the first attempt's successful final response. Delete one event from a copied evidence list, not the store: a sequence gap signals incomplete evidence, not which missing action succeeded. A contiguous sequence alone is not tamper evidence.
+
+Independent LAB-B5 task: build a timeline reader with explicit session/attempt selection, duplicate and missing-record diagnostics, terminal-state classification, and sensitive-field review. Test out-of-order input, unknown event kinds, two sessions with equal sequence numbers, and one incomplete attempt. Preserve raw evidence separately from the reader's interpretations. Do not invent terminal success when the stream ends early.
+
+Pass requires correct attempt attribution and an explanation of what cannot be inferred. Remediation: sort a small shuffled synthetic trace by its local sequence, label each attempt, and identify the minimum extra observation needed for an external-effect claim. Later transfer: introduce a delegated child with a different session ID and require an explicit causal link instead of relying on nearby timestamps.
+
 ### Week 10: Checkpoint and Replay
 
 - Mental model: checkpointing bounds lost work; replay semantics depend on determinism and side effects.
 - Demonstration: crash between planned and completed side effect.
 - Misconception: retrying a failed turn is always safe.
 - Evidence: resume test and explicit exactly-once limitation.
+
+#### Lesson 10: Restoring History Is Not Replaying a Workflow
+
+Entry: complete Lesson 9 and explain the partial-effect case from Lesson 6. Distinguish an application snapshot, a committed database transaction, a SQLite WAL checkpoint, a backup, and re-execution. They preserve or move different state.
+
+This example creates only a disposable database and closes all connections before cleanup. It reopens committed history in the same Python process; it does not kill a worker or simulate power loss.
+
+```python
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from agent_harness import Harness, ModelTurn, ScriptedProvider
+from agent_harness.persistence import SQLiteSessionStore
+
+with TemporaryDirectory() as directory:
+    path = Path(directory) / "lesson.db"
+    with SQLiteSessionStore(path) as store:
+        original = Harness(ScriptedProvider([ModelTurn(content="saved")]),
+                           store=store).run("recover", "Remember this task")
+        snapshot = store.checkpoint("recover")
+    with SQLiteSessionStore(path) as restored:
+        assert restored.checkpoint("recover") == snapshot
+        before = len(restored.messages("recover"))
+        repeated = Harness(ScriptedProvider([ModelTurn(content="another run")]),
+                           store=restored).run("recover", "Remember this task")
+        assert repeated.attempt_id != original.attempt_id
+        assert len(restored.messages("recover")) == before + 2
+        assert sum(e.kind == "run.started" for e in restored.events("recover")) == 2
+print("History restored; repeated input created a new attempt")
+```
+
+Instructor key: reopening recovers rows. Repeating the same input does not resume the original program counter or deduplicate the operation. The snapshot is an inspection representation of messages/events, not an atomic checkpoint across tools, provider state, and external effects. This single-process store reads messages and events separately, so concurrent snapshot consistency is not established.
+
+Worked failure table: before dispatch, safe retry still depends on whether dispatch truly did not occur; after an external effect but before its receipt is stored, the result is ambiguous; after a durable receipt, reconcile by operation identity instead of blindly executing again. A restored transcript saying "sent" is weaker than a service receipt verified against the intended destination.
+
+Guided exercise: create synthetic planned/applied/recorded states on paper, place a crash between each transition, and specify what the survivor can know. Then extend the disposable harness with an operation ledger or use the bounded durability fixture in LAB-C2. Require a fresh-process recovery test before claiming process-loss recovery; graceful close/reopen does not satisfy that requirement.
+
+Independent task: back up a disposable database using a supported database snapshot mechanism, restore into a fresh target, compare required records, and inject an incomplete backup or incompatible schema. Preserve originals and fail visibly. Review the [SQLite backup contract](https://www.sqlite.org/backup.html); do not copy only a live database file and assume WAL contents came with it. A `sqlite3.Connection` transaction context manager does not itself close the connection: use explicit close or `contextlib.closing` in supporting Python inspection code.
+
+WAL safety preflight: record the linked SQLite version/source ID, actual journal mode, filesystem, and concurrent writers/checkpointers. [SQLite's WAL-reset advisory](https://www.sqlite.org/wal.html#the_wal_reset_bug) identifies a rare concurrency corruption bug and fixed versions/backports. A Python version alone is not evidence of the linked library's patch status. Use a verified patched runtime before concurrent WAL exercises; do not reproduce corruption on valuable data.
+
+Pass requires a restore comparison, an explicit ambiguous-outcome path, safe cleanup, and rejection of an unjustified exactly-once claim. Remediation: identify which state survives each failure boundary, then rerun with a changed operation. Delayed transfer changes the external service's idempotency behavior; the learner must revise the recovery decision rather than reuse an old answer.
 
 ### Week 11: Policy and Approval
 

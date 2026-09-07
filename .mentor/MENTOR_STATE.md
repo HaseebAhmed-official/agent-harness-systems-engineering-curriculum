@@ -21,7 +21,7 @@ Build a university-presentable, enterprise-relevant curriculum through which a s
 
 ## Verified Baseline
 
-- Checkpoint date: 2026-09-07. Use Git for current publication state; last entering pushed checkpoint was `0b63ebb`.
+- Checkpoint date: 2026-09-07. Use Git for current publication state; last entering pushed checkpoint was `68cb222`.
 - Implementation `9706d44` passed 63 exact-dependency tests on Windows Python 3.13.1 and from a clean WSL archive on Python 3.13.9 (6.995 seconds). The separate corpus CLI passed 20/20 deterministic contracts with SHA256 `8b3bba3c763daa36b77091d89ef855e8c518e6116331e753d283e10b26074e32` on both systems. Ruff, MyPy (20 source/test files), and Bandit passed at that milestone. Three known upstream A2A warnings remain. The temporary WSL report `/tmp/harness-9706d44.A9dGoQ/corpus-report.json` is regenerable from that commit, not a permanent evidence location.
 - Runtime fixtures cover basic contracts, context, state, memory, orchestration, optional in-process MCP/A2A/telemetry, single-host SQLite durable work, scoped authorization, and evaluator integrity. They are teaching starting points, not production infrastructure or complete labs.
 - The corpus has 20 synthetic fixed tasks, six families, and 10 development/10 public challenge tasks. Its hashes, trace/state grading, leakage guards, and separate Wilson exercise do not establish representative live-model performance.
@@ -40,17 +40,19 @@ These are planning estimates. Completion gates in `PROJECT_STATE.md` control cla
 
 ## Current Milestone
 
-Semester 1 lessons 1-6 now have worked instruction, prediction keys, deliberate practice, independent tasks, remediation, and evidence boundaries. Four exact Python blocks passed in the existing Windows environment. Lesson 5 exposes ignored numeric constraints in the shallow teaching validator; it does not claim a validator repair. Lesson 6 demonstrates an effect before exception, a duplicate effect on approved replay, and denied dispatch for a wrong-session approval. No runtime code changed. Weeks 7-16 and Semester 2 still need comparable delivery development.
+Semester 1 lessons 1-10 now have worked instruction, prediction keys, deliberate practice, independent tasks, remediation, and evidence boundaries. All seven exact Python blocks passed on Windows Python 3.13.1. New lessons address character-budget selection/ablation, formative fault localization, attempt-correlated timelines, and SQLite close/reopen recovery. They explicitly do not prove token budgeting, model quality, tamper resistance, atomic cross-system snapshots, process-loss recovery, or exactly-once effects. Weeks 11-16 and Semester 2 still need comparable development.
+
+Access recovered after three sandbox ACL-failure turns. Corrected a temporary inspection script to close SQLite connections explicitly; cleanup then passed. Windows linked SQLite is 3.47.1, source ID b95d11e958643b969c47a8e5857f3793b9e69700b8f1469371386369a26e577e. Fresh SQLiteSessionStore and DurableTaskStore databases both observed journal mode delete. Their source does not enable WAL, so the specific WAL-reset race does not apply to these observed fresh configurations. Existing/imported databases and WSL were not inspected for this issue. Before concurrent WAL labs, verify a patched SQLite runtime and actual mode; no blanket safety claim follows. See the dated validation register for sources.
 
 OpenClaw intermediate releases `v2026.8.1`, `v2026.8.2`, and `v2026.9.1` were triaged by grouped-entry headings with selected breaking/security/state summaries read in detail. Pinned docs confirm the `agent` default in 8.2 versus `all` in 9.2. The source ledger maps memory/learning defaults, rollback cleanup, principal-scoped skills/approvals, and migration failures into stable teaching requirements. LAB-C3 now has a lineage/deletion/stale-index-worker exercise; release discipline has an irreversible-cleanup gate. These exercises are authored, not product executions.
 
 Latest observed remains `v2026.9.2`; fully reviewed baseline remains `v2026.7.1-2`. Discovery is complete for the intervening releases, but detailed high-risk implementation/installed-product regressions and optional dependency reachability remain pending. Do not repeat broad release scraping or unchanged advisory polling as a substitute for those checks.
 
-Previous turn classification: progress (`0b63ebb` was pushed with lesson and source changes). Current work adds verified lesson examples and targeted release-to-curriculum mapping. No live process is pending. Older session-log Next cells are historical.
+Previous goal continuation was interrupted after environment verification; this pass completed the check and authored/tested lessons 7-10. No live process is pending. Older session-log Next cells are historical.
 
 ## Next Actions
 
-1. Expand Semester 1 lessons 7-10 next: context selection/ablation, unseen midterm debugging, event reconstruction, and checkpoint/replay. Reuse existing guides; include executable examples, grading anchors, remediation, and later transfer tasks. Then finish lessons 11-16 and Semester 2.
+1. Expand Semester 1 lessons 11-16 next: policy/approval, memory, observability, evaluation, integration review, and changed-task practical. Reuse existing guides, with executable examples and assessment anchors. Then expand Semester 2. Lessons 1-10 examples are executed, not independently learner-validated.
 2. Deepen actual executor isolation/timeouts, persistence/crash recovery, and external protocol/provider evaluation. Preserve the difference between a bounded fixture and a complete independently reproduced lab.
 3. For OpenClaw, conduct focused implementation/regression checks for session visibility, approval lifetime, migration conflicts, and optional memory-plugin dependency reachability. No installed user environment changes; use source analysis or disposable evidence lanes. Keep reviewed versus observed version fields distinct.
 4. Obtain accessibility evidence, measured assessor calibration, and independent learner lab reproduction; prepare qualified reviews/pilots after internal blockers are reduced. No claim of institutional effectiveness before real evidence.
