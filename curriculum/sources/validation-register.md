@@ -43,6 +43,12 @@ Track the evidence class and claim boundary for curriculum-wide claims. Product-
 
 ## Product Baselines
 
+### Authorization and Diagnostic Lesson Evidence (2026-09-07)
+
+[OWASP Authorization Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) directly supports deny-default and every-request permission checks. Semester 1 lesson 11 distinguishes those requirements from the baseline's reusable argument-scoped grant and LAB-C6's trusted-host scoped controls. Human authentication, implementation identity, executor containment, and production credential handling are not proved by these examples.
+
+[OpenTelemetry sensitive-data guidance](https://opentelemetry.io/docs/security/handling-sensitive-data/) supports data minimization and describes filtering/redaction and limits of hashing predictable identifiers. Lesson 13 applies minimization beyond export to stored messages/events. A harmless fake-marker variation of lesson 6 confirmed raw exception text in both a failure event and the stored tool message; this is a negative teaching control, not redaction coverage or a production-safe logger. Another variation produced a success-looking response with two synthetic effects; a state predicate rejected the duplicate while accepting a single effect. No live credentials, model, network service, or learner evaluation was used.
+
 ### Context and Persistence Lesson Evidence (2026-09-07)
 
 [Lost in the Middle](https://arxiv.org/abs/2307.03172) supports testing positional sensitivity in its studied 2023 models/tasks; extrapolation to current models needs new measurements. [Anthropic's context-engineering article](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) is engineering guidance for context curation, not independent evidence of this curriculum's effectiveness. Lesson 7 uses deterministic character-budget examples, not a live-model benchmark.

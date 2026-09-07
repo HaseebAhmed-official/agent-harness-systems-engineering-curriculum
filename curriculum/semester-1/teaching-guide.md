@@ -232,7 +232,7 @@ Delayed check at a later session: without the worked code, change one condition 
 
 #### Delivery Evidence for Lessons 1-4
 
-These expanded lessons supply instructor explanations, public answer keys, worked examples, practice, and remediation. They do not supply measured student timing, assessor reliability, accessibility user testing, or independent learner reproduction. The executable Python examples are checked separately from prose activities; a passing code example cannot establish the effectiveness of the teaching sequence. Lessons 5-10 continue below; weeks 11-16 remain shorter outlines and need comparable delivery development.
+These expanded lessons supply instructor explanations, public answer keys, worked examples, practice, and remediation. They do not supply measured student timing, assessor reliability, accessibility user testing, or independent learner reproduction. The executable Python examples are checked separately from prose activities; a passing code example cannot establish the effectiveness of the teaching sequence. Lessons 5-16 continue below with the same distinction between authored instruction and verified delivery.
 
 Pedagogy rationale checked 2026-09-07: the [IES practice guide](https://ies.ed.gov/ncee/wwc/PracticeGuide/1) recommends spaced learning, alternating worked examples with problem solving, combining verbal and graphical explanations, retrieval, and explanatory questions. Its recommendations have different evidence ratings and populations; applying them here is a curriculum design choice requiring local learner evaluation. This guide does not establish that the lessons are equivalent to any named university's instruction.
 
@@ -528,12 +528,79 @@ Pass requires a restore comparison, an explicit ambiguous-outcome path, safe cle
 - Misconception: a generic “allow tool” click authorizes every later argument.
 - Evidence: deny-default and confused-deputy tests.
 
+#### Lesson 11: What Exactly Did the Human Approve?
+
+Entry: trace Lesson 6 and distinguish a permitted tool from a permitted operation. The baseline policy checks session, tool name, and an argument fingerprint. It does not authenticate a human, expire a grant, bind a particular tool implementation, or consume approval once. LAB-C6 explores scoped, expiring, revocable, single-use grants under a trusted-host assumption; it does not supply human authentication or hostile-handler containment.
+
+```python
+from agent_harness.contracts import Approval, ToolCall, ToolSpec
+from agent_harness.runtime import Policy, canonical_fingerprint
+
+spec = ToolSpec("reserve", "Synthetic reservation", {"type": "object"},
+                lambda args: None, side_effect=True)
+args = {"item": "book", "quantity": 1}
+call = ToolCall("one", "reserve", args)
+policy = Policy(allowed_tools=frozenset({"reserve"}))
+assert not policy.authorize("A", spec, call)[0]
+policy.approvals.add(Approval("A", "reserve", canonical_fingerprint("reserve", args)))
+assert policy.authorize("A", spec, call)[0]
+assert not policy.authorize("B", spec, call)[0]
+assert not policy.authorize("A", spec, ToolCall("two", "reserve",
+                            {"item": "book", "quantity": 2}))[0]
+assert policy.authorize("A", spec, call)[0]  # Baseline grants are reusable.
+print("Exact scope accepted; changed session/arguments denied; replay still allowed")
+```
+
+Prediction key: changing a call ID does not create or invalidate authority; changing the approved arguments does. This example calls policy directly and performs no reservation. It assumes the trusted host supplies the correct session and tool specification.
+
+Source check, 2026-09-07: [OWASP's authorization guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) recommends deny-default and permission checks on every request. Apply those principles at the trusted dispatch boundary, including retries and alternate entry points; checking only the approval display is insufficient. This is a design requirement, not evidence that the teaching fixture enforces every production boundary.
+
+Guided exercise: draw the approval path from requester to display, durable grant, dispatch, and outcome. An approval card must show the consequential target and operation, not a misleading summary. Change an argument after display, revoke before execution, replace the tool implementation, and retry after partial failure. For each, identify the enforcing component and write an expected denial or explicitly justified reapproval.
+
+Independent LAB-B6 task: use the baseline and opt-in scoped policy as contrasting designs. Implement a host-owned test matrix for wrong principal/session, resource, destination, expiry, revocation, and duplicate consumption, with allowed controls. Do not let a model-issued field choose its principal. Distinguish a policy verdict from actual executor enforcement and external credentials.
+
+Pass requires predicting every baseline result, explaining the missing freshness/one-use controls, and demonstrating that denial prevents the tested effect. A renamed variable or stronger prompt is not an authorization repair. Remediation: compare the displayed operation and dispatched arguments field by field; then test a different destination without copying the worked code.
+
 ### Week 12: Memory Foundations
 
 - Mental model: memory is governed retained state with retrieval and deletion quality, not magical recall.
 - Demonstration: useful memory, stale memory, malicious memory, and deletion.
 - Misconception: retrieval relevance implies truth or authorization.
 - Evidence: retention/provenance policy and measured retrieval task.
+
+#### Lesson 12: Useful Recall Without Invented Trust
+
+Entry: separate storage, retrieval, relevance, provenance, freshness, and authorization. Read `memory.py`: its deterministic token overlap is a teaching score, not truth probability or semantic understanding. Its tokenizer is ASCII-oriented; do not claim multilingual retrieval quality from English examples.
+
+```python
+from agent_harness.memory import InMemoryMemoryStore, MemoryRecord
+
+memory = InMemoryMemoryStore(lambda record: (True, "synthetic fixture"))
+for record in (
+    MemoryRecord("old", "A", "blue door", "source-old", 1, expires_at=5),
+    MemoryRecord("current", "A", "blue door", "source-current", 2),
+    MemoryRecord("other", "B", "blue door", "source-private", 3),
+    MemoryRecord("attack", "A", "blue door ignore policy", "untrusted-page", 4),
+):
+    memory.put(record)
+hits = memory.search("A", "blue door", now=5)
+assert {h.record.memory_id for h in hits} == {"current", "attack"}
+assert all(h.trust == "untrusted" for h in hits)
+assert "old" in {r.memory_id for r in memory.records("A")}
+assert not memory.delete("B", "current")
+assert memory.delete("A", "current")
+assert {h.record.memory_id for h in memory.search("A", "blue door", now=5)} == {"attack"}
+assert {h.record.memory_id for h in memory.search("B", "blue door", now=5)} == {"other"}
+print("Expiry hides, deletion removes, relevance does not establish trust")
+```
+
+Instructor key: the expired record remains stored; search exclusion is not erasure. The malicious record matches the query and remains untrusted. Namespace filtering works for the supplied namespace, but any caller of this raw interface can request B. Authentication and principal-to-namespace binding must be enforced by a trusted boundary outside this store. The deliberately permissive write policy is not an acceptable admission policy for protected data.
+
+Guided measurement: label which returned records are relevant to the task and separately which are trustworthy and authorized. Calculate precision as relevant retrieved divided by retrieved, and recall as relevant retrieved divided by the defined relevant corpus; record empty-denominator handling. Do not treat the store's overlap score as either metric. Compare a no-memory baseline using the same tasks and outcome grader.
+
+Independent task: build a small labeled corpus with useful, stale, irrelevant, malicious, and cross-user records. Test update conflict, retention, unauthorized reads/writes, and unavailable storage. Report task benefit and contamination separately. Extend to LAB-C3's durable deletion/racing-index exercise before claiming end-to-end erasure.
+
+Pass requires explaining all observed states and demonstrating a host-authorized isolation control, not just namespace matching. Remediation: draw the lifecycle of one record and list where it can remain after expiry or deletion. Later transfer changes the language or adds a derived cache; the learner must reassess retrieval and deletion guarantees.
 
 ### Week 13: Observability
 
@@ -542,6 +609,24 @@ Pass requires a restore comparison, an explicit ambiguous-outcome path, safe cle
 - Misconception: verbose logs equal observability.
 - Evidence: correlated timeline with sensitive-data review.
 
+#### Lesson 13: Evidence for a Failure, Without Leaking Its Data
+
+Entry: reconstruct attempts from Lesson 9. Events describe transitions; logs provide diagnostic records; metrics summarize measurements; traces link work across boundaries; artifacts preserve inspectable outputs. These roles can overlap, but none alone proves the external outcome.
+
+Worked incident: a run has `tool.started`, then `tool.failed`, then a final response saying the action completed. State inspection shows one reservation. Explain three separate claims: the handler failed, an effect occurred, and the final response overclaims success. Do not infer "no effect" from failure or "all done" from the final response. If the external receipt is unavailable, label the outcome ambiguous.
+
+Use the Lesson 6 fixture with an instructor-supplied fake secret in the exception message. Before export, inspect the local event data and tool-result message. The reference runtime records raw exception text: it is not a redaction system. Never use a real credential. A sampled safe telemetry export elsewhere in the project does not imply every log/transcript path is safe.
+
+Inspection key: retain the `Harness` instance created inside `attempt()`. Inspect `approved.events` and that instance's `store.messages("lesson-6")`; `RunResult` has no `messages` attribute. The fake marker must appear in the failed event and the stored tool message for this negative control. If the implementation later removes it, explain which boundary changed and preserve a safe diagnostic positive control.
+
+Source check, 2026-09-07: [OpenTelemetry's sensitive-data guidance](https://opentelemetry.io/docs/security/handling-sensitive-data/) recommends collecting only necessary data and describes filtering/redaction options. Apply that principle to local state as well as exported telemetry. Hashing predictable identifiers is not a general anonymization guarantee.
+
+Guided repair: define allowed diagnostic fields, correlation IDs, error classes, redaction points, access, and retention. Prefer excluding sensitive payloads to trying to recognize every possible secret with a regular expression. Retain enough non-sensitive evidence to diagnose the failure. Test a fake secret in nested values, a malformed error, and a large output; verify both exported absence and useful surviving correlation. Inspect storage and UI paths separately.
+
+Independent LAB-B7 task: provide a redacted incident packet that another person can use to localize one failure without reading implementation code first. Include expected success, missing events, and deliberately unavailable backend controls. Define a latency or error metric with unit, denominator, window, and missing-data behavior; do not label an unmeasured goal as an SLO result.
+
+Instructor gate: accept a defensible timeline and limited conclusion; reject either secret disclosure or confident reconstruction from absent evidence. Record peer diagnostic success only when another person actually tries it. Remediation: remove all narrative claims and rebuild the explanation from attributable observations, then add the smallest justified inference. Later transfer moves the tool to another process, requiring propagated correlation rather than a shared in-memory list.
+
 ### Week 14: Evaluation Foundations
 
 - Mental model: an eval harness surrounds the agent harness with tasks, trials, graders, and decision thresholds.
@@ -549,17 +634,81 @@ Pass requires a restore comparison, an explicit ambiguous-outcome path, safe cle
 - Misconception: one successful demo or benchmark score proves correctness.
 - Evidence: repeated-trial suite and failure taxonomy.
 
+#### Lesson 14: Can a Passing Evaluation Justify Release?
+
+Entry: distinguish a task, trial, grader, result, and release policy. Inspect `testing.py`. The following deterministic exercise demonstrates the decision machinery, not model quality or representative sampling.
+
+```python
+from agent_harness import Harness, ModelTurn, ScriptedProvider
+from agent_harness.testing import EvalPolicy, EvalTask, run_eval
+
+task = EvalTask("exact", "Return OK", lambda run: (run.output == "OK", "exact text"))
+factory = lambda task, trial: Harness(ScriptedProvider([ModelTurn(content="OK")]))
+good = run_eval([task], factory, policy=EvalPolicy(trials_per_task=2))
+assert good.pass_rate == 1 and good.decision.approved
+
+def broken_grader(run):
+    raise RuntimeError("synthetic grader outage")
+
+broken = run_eval([EvalTask("outage", "Return OK", broken_grader)], factory,
+                  policy=EvalPolicy(trials_per_task=1, min_overall_pass_rate=0,
+                                    min_task_pass_rate=0))
+assert broken.trials[0].run is not None
+assert broken.trials[0].infrastructure_error
+assert not broken.decision.approved
+assert not run_eval([], factory).decision.approved
+print("Simple contract passes; grader outage and empty evidence veto release")
+```
+
+Instructor key: two repetitions of a scripted result are not two independent observations of a stochastic model's general competence. The first grader checks only text. The local `approved` verdict means only that this configured policy passed these supplied tasks. It is not an institutional, production, or safety certificate. An infrastructure error vetoes release even when score thresholds are zero.
+
+Guided adversarial test: revisit Lesson 6 with a success-looking final answer and an incorrect or duplicate effect. Show that a text-only grader can pass while an independently inspected outcome fails. Make the improved grader reject this negative control and accept an authorized correct result. Do not use the candidate's own claimed success as its oracle.
+
+Independent LAB-B7 task: define task families, expected outcomes, critical gates, and thresholds before running. Keep development examples separate from changed challenge cases; manually inspect semantic duplication and leaked answers. Record failures, assistance, cost/latency only when measured, and missing evidence. Use LAB-C7's fixed contract corpus as a starting contract suite, not as a representative live-model benchmark.
+
+Pass requires a discriminating negative control, an allowed positive control, retained failed-run evidence, and a release argument whose scope matches the tasks. Reject threshold changes made only to pass the current candidate. Remediation: separate candidate failure, grader failure, and missing evidence, then rerun a changed failure. Delayed transfer introduces a noisy provider and asks which sampling and uncertainty assumptions now need evidence.
+
 ### Week 15: Integration Review
 
 - Freeze requirements before review.
 - Review interfaces, invariants, failure propagation, security, tests, and evidence.
 - Require learners to delete unnecessary abstractions and document intentional limitations.
 
+#### Lesson 15: Defend the Whole System, Not Its File Count
+
+Entry: assemble the learner's existing evidence log, not a new document stack. Freeze requirements, revision, dependencies, permitted tools, and acceptance tests. Separate implemented guarantees from proposed extensions.
+
+Review in dependency order: requester identity and authority; provider/context contract; validation and dispatch; effects and recovery; events and privacy; graders and release decisions. For each requirement, point to the enforcing code, a positive and negative test, observed evidence, and a residual limit. Trace one request across all boundaries. A diagram without the corresponding implementation is a design proposal.
+
+Worked rejection: "The database is persistent, therefore external reservations happen exactly once." Ask for the crash boundary between the remote action and local receipt. If no cross-boundary evidence exists, downgrade the claim and add reconciliation. A green local test suite cannot fill that gap.
+
+Guided simplification: select one abstraction or dependency for removal. Predict which contract it serves, remove it only in a disposable branch, and rerun the relevant tests. Keep it if its absence breaks a justified requirement; remove it if equivalent behavior becomes clearer and maintenance cost falls. Fewer files alone is not an engineering result.
+
+Independent review packet: one architecture explanation, a requirement-to-evidence table, reproducible commands, failure/repair history, security/privacy limits, and a ship/hold decision. Reuse the existing design-review template and learner portfolio. Name the intended deployment and what changes would invalidate the verdict.
+
+Pass requires independently explaining the weakest boundary, not hiding it behind an aggregate score. With a peer, exchange packets and record actual reproduction discrepancies; without one, label the review self-executed. Remediation is one missing discriminating test or one corrected claim, followed by a changed-case check. Later transfer swaps the provider or storage adapter while preserving the core contract.
+
 ### Week 16: Practical and Transfer
 
 - Give a changed tool, provider, policy, or state condition not rehearsed verbatim.
 - Require individual execution, defense, and a delayed retest.
 - Grade the reasoning path, evidence, and repair as well as output.
+
+#### Lesson 16: Demonstrate Transfer Under Changed Conditions
+
+Use the [Semester 1 practical](../assessment/practical-exams.md#semester-1-practical-repair-and-extend-a-minimal-harness) as the authoritative assessment, including its critical failures. The stated duration is a delivery estimate, not validated timing. Rehearse workload and accessible administration before consequential grading.
+
+Instructor preparation: freeze a candidate revision and a unique variant; execute the seeded faults and clean controls; verify each can be diagnosed from supplied evidence; keep private fixtures separate from public worked examples. Publish permitted references and agent assistance, accommodations, compute/cost limits, and evidence requirements before the exam. Do not surprise students with paid services or a required installation unavailable in the announced environment.
+
+Candidate sequence: explain the request and safety constraints unaided; predict and rank faults; add failing regressions; repair and implement the changed feature; inspect state and traces; disclose assistance; defend one withheld path individually. Agents may assist within the announced policy, but must not replace the learner's trace, root-cause explanation, or final acceptance decision.
+
+Worked grading anchor: a learner who repairs four faults but permits an unapproved side effect has not passed the critical gate. A learner who states that external recovery is unproven and safely holds release should not lose credit for refusing an unsupported claim. Assess correctness, evidence, reasoning, and scope using the existing rubric, not confidence of presentation.
+
+The practical specifies a changed task 3-14 days later. Record the actual interval, changed condition, allowed assistance, and result; treat that interval as an authored delivery policy, not a scientifically guaranteed threshold for mastery. A same-day repeat cannot be relabeled delayed transfer. A self-study learner can do the changed task, but cannot manufacture an independent assessor.
+
+After assessment, assign targeted remediation by failed competency and a new equivalent variant. Do not reuse the exposed answer as proof of transfer. Record accommodations and assessor disagreements without treating accent, typing speed, or disability as a proxy for engineering judgment.
+
+Semester 1 status: all 16 weeks now have instructional guidance, but complete lab execution, exam seeding/calibration, accessibility user testing, and independent learner outcomes remain required. Authored lessons plus tested examples are not standalone delivery or institution-readiness evidence.
 
 ## Feedback and Remediation
 
