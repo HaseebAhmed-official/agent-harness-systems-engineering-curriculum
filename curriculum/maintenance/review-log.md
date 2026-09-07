@@ -75,6 +75,14 @@
 - Verification: both example outputs matched; changing the final answer to 999 caused the intended assertion failure. All four maintenance-script tests passed. Changed JSON parsed, three local Markdown links/anchors resolved, and Git whitespace checks passed. No runtime code changed and the historical 63-test result was not presented as a new execution.
 - Required follow-up: finish intermediate release/source review, isolated product regressions and independent security review; continue full teaching development and empirical learner/assessor/accessibility evidence. No readiness gate was promoted.
 
+### 2026-09-07 Intermediate Triage and Lessons 5-6
+
+- Inventoried grouped-entry headings for `v2026.8.1`, `v2026.8.2`, and `v2026.9.1`; read selected breaking, authority, state, privacy, dependency, and recovery entries in detail. This was not an exhaustive PR or implementation audit. Version-pinned session-tool docs confirm the 8.2 `agent` to 9.2 `all` default transition.
+- Integrated a dated claim/impact table in the validation register, an irreversible-cleanup exercise in release discipline, and a lineage/deletion/racing-index exercise in LAB-C3. Read current official memory-provenance and SDK migration guidance to bound deletion and compatibility claims. Primary source links and unresolved risks remain in the register.
+- Expanded lessons 5-6 around the actual reference validator and execution contracts. All four exact Markdown Python blocks passed. Additional controlled replay produced two synthetic effects; a wrong-session approval rejected before dispatch. Runtime code and the user's installed OpenClaw were unchanged.
+- Discovery stopped once material change families and test obligations were mapped. Remaining research is targeted implementation/regression and dependency-reachability evidence. The fully reviewed release did not advance. Next instructional work is lessons 7-10, not another broad source scan.
+- Validation: all four maintenance-script tests passed; changed JSON parsed; all 16 weekly headings remained ordered and unique; six expanded lesson headings and five local links/anchors checked; Git whitespace check passed. A Windows default-encoding failure in the ad-hoc checker was corrected by explicit UTF-8 reads and the check was rerun successfully. No new files or runtime dependencies were added.
+
 ## Logging rule
 
 Every future upstream review should append:

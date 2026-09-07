@@ -21,7 +21,7 @@ Build a university-presentable, enterprise-relevant curriculum through which a s
 
 ## Verified Baseline
 
-- Checkpoint date: 2026-09-07. Use Git for current publication state; last entering pushed checkpoint was `87da33c`.
+- Checkpoint date: 2026-09-07. Use Git for current publication state; last entering pushed checkpoint was `0b63ebb`.
 - Implementation `9706d44` passed 63 exact-dependency tests on Windows Python 3.13.1 and from a clean WSL archive on Python 3.13.9 (6.995 seconds). The separate corpus CLI passed 20/20 deterministic contracts with SHA256 `8b3bba3c763daa36b77091d89ef855e8c518e6116331e753d283e10b26074e32` on both systems. Ruff, MyPy (20 source/test files), and Bandit passed at that milestone. Three known upstream A2A warnings remain. The temporary WSL report `/tmp/harness-9706d44.A9dGoQ/corpus-report.json` is regenerable from that commit, not a permanent evidence location.
 - Runtime fixtures cover basic contracts, context, state, memory, orchestration, optional in-process MCP/A2A/telemetry, single-host SQLite durable work, scoped authorization, and evaluator integrity. They are teaching starting points, not production infrastructure or complete labs.
 - The corpus has 20 synthetic fixed tasks, six families, and 10 development/10 public challenge tasks. Its hashes, trace/state grading, leakage guards, and separate Wilson exercise do not establish representative live-model performance.
@@ -40,19 +40,21 @@ These are planning estimates. Completion gates in `PROJECT_STATE.md` control cla
 
 ## Current Milestone
 
-Semester 1 lessons 1-4 now include entry gates, explanations, worked examples, prediction questions/keys, guided and independent practice, remediation, and explicit evidence limits. Both Python examples were executed successfully in the existing Windows exact-dependency environment. Fixes clarify final-text versus handler-state grading and repair LAB-C6 prerequisite references (B3 tools, B6 policy, B5 sessions/events). Weeks 5-16 remain outlines. No learner timing, delayed transfer, accessibility usability, or assessor data has been manufactured.
+Semester 1 lessons 1-6 now have worked instruction, prediction keys, deliberate practice, independent tasks, remediation, and evidence boundaries. Four exact Python blocks passed in the existing Windows environment. Lesson 5 exposes ignored numeric constraints in the shallow teaching validator; it does not claim a validator repair. Lesson 6 demonstrates an effect before exception, a duplicate effect on approved replay, and denied dispatch for a wrong-session approval. No runtime code changed. Weeks 7-16 and Semester 2 still need comparable delivery development.
 
-OpenClaw targeted review observed `v2026.9.2` / npm latest `2026.9.2`, beta tag `2026.9.1`, and extended-stable `2026.6.34`. It integrated session-visibility/privacy, migration/restore/approval regression exercises, and the September 8 plugin alias deprecation boundary. All 647 advisory metadata records were compared; none was updated after the saved August 13 timestamp. The last fully reviewed baseline stays `v2026.7.1-2`: intermediate release review and pinned product tests are still pending. Do not auto-promote it based on latest-tag equality.
+OpenClaw intermediate releases `v2026.8.1`, `v2026.8.2`, and `v2026.9.1` were triaged by grouped-entry headings with selected breaking/security/state summaries read in detail. Pinned docs confirm the `agent` default in 8.2 versus `all` in 9.2. The source ledger maps memory/learning defaults, rollback cleanup, principal-scoped skills/approvals, and migration failures into stable teaching requirements. LAB-C3 now has a lineage/deletion/stale-index-worker exercise; release discipline has an irreversible-cleanup gate. These exercises are authored, not product executions.
 
-Continuity was consolidated to remove contradictory pending-run instructions. Older session-log Next cells are historical, not current work orders. Previous turn classification: progress; lesson content was added and its exact examples have now been executed. No live process is pending.
+Latest observed remains `v2026.9.2`; fully reviewed baseline remains `v2026.7.1-2`. Discovery is complete for the intervening releases, but detailed high-risk implementation/installed-product regressions and optional dependency reachability remain pending. Do not repeat broad release scraping or unchanged advisory polling as a substitute for those checks.
+
+Previous turn classification: progress (`0b63ebb` was pushed with lesson and source changes). Current work adds verified lesson examples and targeted release-to-curriculum mapping. No live process is pending. Older session-log Next cells are historical.
 
 ## Next Actions
 
-1. Finish the intervening OpenClaw `v2026.8.1`, `v2026.8.2`, and `v2026.9.1` migration/source review before advancing the reviewed baseline; retain isolated product regression and independent security checks as separate evidence.
-2. Expand Semester 1 lessons 5-16 and Semester 2 delivery in existing guides, with executable worked examples, authentic practice, answer/rubric calibration, remediation, and delayed transfer tasks. Do not create a file per lesson.
-3. Add representative provider/workload evaluation and manually reviewed grader/semantic-leakage evidence; deepen process/network isolation, persistence, crash/recovery, and external interoperability labs.
-4. Conduct accessibility review, measured assessor calibration, and independent learner lab reproduction. Seek qualified independent reviews/pilots once internal blockers are reduced.
-5. Keep curriculum and frozen Mentor OS separate. Save each material milestone here and in PROJECT_STATE; never infer readiness percentages from test counts.
+1. Expand Semester 1 lessons 7-10 next: context selection/ablation, unseen midterm debugging, event reconstruction, and checkpoint/replay. Reuse existing guides; include executable examples, grading anchors, remediation, and later transfer tasks. Then finish lessons 11-16 and Semester 2.
+2. Deepen actual executor isolation/timeouts, persistence/crash recovery, and external protocol/provider evaluation. Preserve the difference between a bounded fixture and a complete independently reproduced lab.
+3. For OpenClaw, conduct focused implementation/regression checks for session visibility, approval lifetime, migration conflicts, and optional memory-plugin dependency reachability. No installed user environment changes; use source analysis or disposable evidence lanes. Keep reviewed versus observed version fields distinct.
+4. Obtain accessibility evidence, measured assessor calibration, and independent learner lab reproduction; prepare qualified reviews/pilots after internal blockers are reduced. No claim of institutional effectiveness before real evidence.
+5. Keep Mentor OS frozen and separately versioned. Save material decisions and evidence here and in PROJECT_STATE; do not raise percentages from test counts.
 
 ## Required Curriculum Layers
 

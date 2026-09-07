@@ -232,7 +232,7 @@ Delayed check at a later session: without the worked code, change one condition 
 
 #### Delivery Evidence for Lessons 1-4
 
-These expanded lessons supply instructor explanations, public answer keys, worked examples, practice, and remediation. They do not supply measured student timing, assessor reliability, accessibility user testing, or independent learner reproduction. The executable Python examples are checked separately from prose activities; a passing code example cannot establish the effectiveness of the teaching sequence. Weeks 5-16 below remain shorter teaching outlines and need comparable delivery development.
+These expanded lessons supply instructor explanations, public answer keys, worked examples, practice, and remediation. They do not supply measured student timing, assessor reliability, accessibility user testing, or independent learner reproduction. The executable Python examples are checked separately from prose activities; a passing code example cannot establish the effectiveness of the teaching sequence. Lessons 5-6 continue below; weeks 7-16 remain shorter outlines and need comparable delivery development.
 
 Pedagogy rationale checked 2026-09-07: the [IES practice guide](https://ies.ed.gov/ncee/wwc/PracticeGuide/1) recommends spaced learning, alternating worked examples with problem solving, combining verbal and graphical explanations, retrieval, and explanatory questions. Its recommendations have different evidence ratings and populations; applying them here is a curriculum design choice requiring local learner evaluation. This guide does not establish that the lessons are equivalent to any named university's instruction.
 
@@ -243,12 +243,121 @@ Pedagogy rationale checked 2026-09-07: the [IES practice guide](https://ies.ed.g
 - Misconception: type hints or tool descriptions validate runtime arguments.
 - Evidence: malformed/unknown/duplicate call tests and improved error design.
 
+#### Lesson 5: Does the Validator Enforce the Contract?
+
+Entry: distinguish a dictionary from a serialized JSON document and trace the rejected call in Lesson 3. Review `validate_arguments` in `reference-harness/src/agent_harness/runtime.py`. A schema states a contract; a validator enforces the keywords it actually implements. The educational validator implements only a shallow subset. It is not a conforming general JSON Schema validator.
+
+Opening prediction: a purchase tool says "quantity must be positive" in its description, while its runtime checks only integer type. Can zero reach the handler? Yes. Natural-language descriptions are not enforcement. Business constraints, caller authorization, and resource boundaries require their own checks even when structural validation is complete.
+
+Run this exact block from `reference-harness` with `PYTHONPATH=src`. No handler or external service is invoked.
+
+```python
+from agent_harness.runtime import SchemaError, validate_arguments
+
+schema = {
+    "type": "object",
+    "properties": {"quantity": {"type": "integer"}},
+    "required": ["quantity"],
+    "additionalProperties": False,
+}
+cases = [
+    ("integer", {"quantity": 2}, True),
+    ("missing", {}, False),
+    ("boolean", {"quantity": True}, False),
+    ("string", {"quantity": "2"}, False),
+    ("extra", {"quantity": 2, "admin": True}, False),
+]
+for label, arguments, expected in cases:
+    try:
+        validate_arguments(schema, arguments)
+        accepted = True
+    except SchemaError:
+        accepted = False
+    assert accepted == expected, label
+
+# Deliberately exposes a limitation, not an approved security control.
+looks_stricter = {
+    **schema,
+    "properties": {"quantity": {"type": "integer", "minimum": 1}},
+}
+validate_arguments(looks_stricter, {"quantity": 0})
+print("5 structural cases checked; minimum is NOT enforced")
+```
+
+Instructor key: missing, boolean, string, and extra-field cases are rejected. Zero passes the last check because this implementation ignores `minimum`; adding that keyword did not add enforcement. Compare the [2020-12 validation specification](https://json-schema.org/draft/2020-12/json-schema-validation), sections 6.1-6.5, which define assertions such as type, enumeration, and numeric limits. This named dialect is a reference, not a claim that this code implements it. JSON Schema's integer semantics also differ from simply checking Python `int`; test boundary representations when replacing the validator.
+
+Guided repair in the learner's fork: first write a failing test that zero is rejected, then either implement and clearly document a limited business check or select a maintained validator with an explicit dialect. Test negative, zero, positive, boolean, missing, extra, and nested input. Never silently treat unsupported constraints as protection. When replacing the validator, run supported old cases and intentionally changed cases; explain any compatibility change.
+
+Independent LAB-B3 task: design a synthetic inventory-reservation tool. Separate structural validity from stock availability, caller scope, and idempotency. Write a contract table with input, output, failure category, retryability, and side effects. Use a malformed-call control that never enters the handler and an authorized valid control that does. Do not allow the model to choose its own caller identity. No real purchases.
+
+Feedback anchor: "Your test checks for an error string, but the handler could already have run. Add a dispatch counter and assert it stays zero." Pass requires correct negative and positive controls, detection of the unsupported-keyword case, and an oral explanation of validation versus authorization. Remediation: classify five failures as schema, business rule, authorization, execution, or result-grading; then repeat with a different tool.
+
+At a later session, give a nested schema or a changed numeric boundary without the worked code. Record actual delay, hints, predictions, and repair. An agent may help generate cases after the learner's first predictions, but the learner must explain why each case distinguishes a failure.
+
 ### Week 6: Execution Boundary
 
 - Mental model: tool choice and tool execution are different authority layers.
 - Demonstration: working directory, environment, timeout, resource, and side-effect boundaries.
 - Misconception: a prompt instruction is a sandbox.
 - Evidence: execution ownership diagram and bounded failure test.
+
+#### Lesson 6: A Failed Tool Can Still Have Effects
+
+Entry: trace schema validation, policy decision, dispatch, and final response separately. Explain a side effect as a change outside a function's returned value, such as a database mutation, file write, or message delivery. An exception describes control flow; it does not undo such changes.
+
+The exercise below uses only an in-memory list. It cannot charge money, send messages, or touch files. Predict both the terminal status and list contents for denied and approved calls before execution.
+
+```python
+from agent_harness import Harness, ModelTurn, ScriptedProvider, ToolCall, ToolSpec
+from agent_harness.contracts import Approval
+from agent_harness.runtime import Policy, ToolRegistry, canonical_fingerprint
+
+effects = []
+
+def reserve(arguments):
+    effects.append(arguments["item"])
+    raise RuntimeError("synthetic response failure after mutation")
+
+registry = ToolRegistry()
+registry.register(ToolSpec(
+    name="reserve", description="Append a synthetic reservation, then fail",
+    input_schema={"type": "object", "properties": {"item": {"type": "string"}},
+                  "required": ["item"], "additionalProperties": False},
+    handler=reserve, side_effect=True,
+))
+arguments = {"item": "demo-book"}
+policy = Policy()
+
+def attempt():
+    provider = ScriptedProvider([
+        ModelTurn(tool_calls=(ToolCall("reserve-1", "reserve", arguments),)),
+        ModelTurn(content="The tool failed; inspect state before retrying."),
+    ])
+    return Harness(provider, registry=registry, policy=policy).run("lesson-6", "Reserve.")
+
+denied = attempt()
+assert denied.stop_reason.value == "policy_denied"
+assert effects == []
+assert not any(e.kind == "tool.started" for e in denied.events)
+policy.approvals.add(Approval("lesson-6", "reserve",
+                             canonical_fingerprint("reserve", arguments)))
+approved = attempt()
+assert effects == ["demo-book"]
+assert any(e.kind == "tool.failed" for e in approved.events)
+assert not any(e.kind == "tool.completed" for e in approved.events)
+assert approved.stop_reason.value == "final"
+print("Denied: 0 effects; approved: 1 effect despite tool failure")
+```
+
+Instructor key: denial prevents dispatch. Approval permits the handler; it mutates the list and raises. The harness records failure and the scripted provider supplies a final response. `final` means the conversation reached a final response, not that the task succeeded or no effect occurred. This example uses the baseline reusable approval policy, not the one-use `ScopedPolicy` from LAB-C6.
+
+Guided variation: rerun the same approved operation. Predict and observe the duplicate list entry. The fixture contains no idempotency ledger or transactional rollback. Adding `idempotent=True` metadata would not implement either. Propose an operation key whose intent is checked against the original request, then a reconciliation query for an ambiguous result. Do not "repair" uncertainty by always retrying.
+
+Execution-boundary board exercise: fill in who controls working directory, accessible paths, environment secrets, network destinations, process lifetime, output size, and resource budget. Instructor key: these require host/executor controls; neither a tool description nor a normal Python function call provides OS isolation. A child process alone is not a sandbox. The [Python subprocess contract](https://docs.python.org/3/library/subprocess.html#subprocess.run) supports explicit working directory, environment, timeout, and exit checking, but these do not by themselves isolate network access, the filesystem, or a whole descendant process tree. Do not run untrusted code to demonstrate this.
+
+Independent LAB-B6 task: in a disposable directory, implement a bounded executor for an instructor-owned harmless program, with explicit arguments, minimal environment, allowed working directory, bounded output, timeout, and exit-result reporting. Use no shell interpolation. Include a successful control, nonzero exit, oversized output, and slow program; inspect cleanup and remaining effects after termination. Where a control is unavailable on a platform, state the gap rather than simulate it as enforced. An advanced extension must enforce and test OS/network isolation separately.
+
+Pass requires a before/after state comparison, correct distinction among denial, execution failure, and final response, a safe retry decision, and an explicit isolation limit. Remediation: trace the mutation and exception as separate events, then analyze a changed "message accepted but acknowledgment lost" scenario. At a later session require the learner to defend a recovery plan without replaying this code. An assert-only screenshot is not evidence of external-state reconciliation.
 
 ### Week 7: Context Engineering
 

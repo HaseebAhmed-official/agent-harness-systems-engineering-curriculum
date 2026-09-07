@@ -11,7 +11,7 @@
   "advisory_review_window": "2026-04-25 through 2026-08-15",
   "new_advisories_reviewed": 112,
   "advisory_recording_policy": "last_reviewed_advisories lists representative curriculum-integrated cases; the full official feed was reviewed for the stated window",
-  "last_review_notes": "Fully reviewed baseline remains v2026.7.1-2 dated 2026-08-15. Targeted 2026-09-07 review read v2026.9.2 grouped release notes and selected official session/security/channel/plugin-compatibility docs, integrating authority/privacy and migration regression teaching. GitHub latest/npm latest are v2026.9.2/2026.9.2; npm beta is 2026.9.1 and extended-stable is 2026.6.34. All 647 published advisory metadata records were compared with the saved cutoff; none updated later than 2026-08-13T17:27:46Z. Advisory bodies were not reread. Intermediate release changes, source-level confirmation, isolated product regressions, and independent security review remain pending. Latest observation is not a reviewed or cohort-approved baseline.",
+  "last_review_notes": "Fully reviewed baseline remains v2026.7.1-2 dated 2026-08-15. Targeted 2026-09-07 review read v2026.9.2 grouped release notes and selected official session/security/channel/plugin-compatibility docs, integrating authority/privacy and migration regression teaching. GitHub latest/npm latest are v2026.9.2/2026.9.2; npm beta is 2026.9.1 and extended-stable is 2026.6.34. All 647 published advisory metadata records were compared with the saved cutoff; none updated later than 2026-08-13T17:27:46Z. Advisory bodies were not reread. Intermediate release changes, source-level confirmation, isolated product regressions, and independent security review remain pending. Latest observation is not a reviewed or cohort-approved baseline. Follow-up triage covered intervening release headings and selected high-risk summaries, with pinned documentation checks and teaching mappings; remaining intermediate reviews are targeted implementation/regression checks, not initial discovery.",
   "last_reviewed_advisories": [
     "GHSA-xww8-gqvh-92x9",
     "GHSA-v6r2-jh58-xx6w",
@@ -50,5 +50,13 @@
     "v2026.8.1",
     "v2026.8.2",
     "v2026.9.1"
+  ],
+  "intermediate_release_triage_date": "2026-09-07",
+  "intermediate_release_triage_scope": "Grouped-entry headings inventoried for v2026.8.1, v2026.8.2, v2026.9.1; selected breaking, authority, memory, state, dependency, and migration summaries read in detail. Version-pinned documentation confirms session defaults for v2026.8.2 and v2026.9.2. This is not exhaustive implementation or installed-product validation.",
+  "pending_review_checks": [
+    "effective session visibility and principal isolation",
+    "approval lifetime and closed-authority regressions",
+    "migration conflict preservation and rollback cleanup",
+    "optional memory-plugin dependency reachability"
   ]
 }

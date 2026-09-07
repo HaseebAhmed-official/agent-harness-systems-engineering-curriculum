@@ -109,6 +109,8 @@ The current implemented baseline is `9706d44`: 63 bounded tests and 20 synthetic
 
 A targeted OpenClaw September review found material session-access and migration teaching impact. The validation register and maintenance review log record primary sources, the unchanged advisory metadata cutoff, and the unresolved intermediate-release/product-test scope. Latest observed is not fully reviewed. Expanded instruction and passing examples do not prove student learning, full delivery readiness, accessibility, assessor consistency, or enterprise safety. G7 and external-adoption gates remain incomplete.
 
+Follow-up on 2026-09-07: lessons 5-6 now expose the teaching validator's unsupported `minimum` constraint and demonstrate partial effects before a tool exception. All four exact guide examples passed; approved replay produced the expected duplicate synthetic effect, and wrong-session approval prevented dispatch. These observations do not repair schema completeness, add a production executor, or prove classroom effectiveness. Intermediate OpenClaw releases were triaged and selected claims were checked against version-pinned documentation; detailed implementation/regression review remains open. LAB-C3 deletion and migration-cleanup extensions are authored, not executed product proof.
+
 ## 2026-08-16 Durable Execution Addendum
 
 This addendum is also author-session evidence, not independent review. Implementation commit `a78f42a` added a standard-library SQLite durable-work starting fixture with an explicit state/version contract, atomic claims, per-claim lease-token fencing, bounded retry policy, idempotency-intent checks, cancellation, expired-lease recovery, quarantine, compensation/manual resolution, and an append-only application transition ledger.

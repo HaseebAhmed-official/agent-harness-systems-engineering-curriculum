@@ -67,7 +67,25 @@ The [compatibility guide](https://docs.openclaw.ai/plugins/compatibility) deprec
 
 The paginated [official advisory API](https://api.github.com/repos/openclaw/openclaw/security-advisories?per_page=100) returned 647 records, with no update later than the saved August 13 timestamp. This was a metadata comparison, not a reread or assurance of no vulnerabilities.
 
-Scope remains partial: the `v2026.8.1`, `v2026.8.2`, and `v2026.9.1` migration history, source-level confirmation, installed-version regression tests, and independent security review are pending. The fully reviewed baseline stays at `v2026.7.1-2`; latest observations are recorded separately. See the [security exercise](../governance-and-security-strand.md#openclaw-case-session-access-after-an-upgrade-2026-09-07).
+Scope remains partial: the intermediate releases are triaged below, but high-risk implementation checks, installed-version regression tests, and independent security review are pending. The fully reviewed baseline stays at `v2026.7.1-2`; latest observations are recorded separately. See the [security exercise](../governance-and-security-strand.md#openclaw-case-session-access-after-an-upgrade-2026-09-07).
+
+#### Intermediate Release Triage: 2026-09-07
+
+All grouped-entry headings for the three intervening releases were inventoried. Breaking changes and selected authority, state, privacy, plugin, and recovery entries were read in detail; cosmetic/channel-specific fixes and the individual PR record were not exhaustively audited. This closes initial discovery, not the full migration or product-execution gate.
+
+| Evidence | Material documented change | Curriculum consequence |
+| --- | --- | --- |
+| [v2026.8.1](https://github.com/openclaw/openclaw/releases/tag/v2026.8.1), published August 31 | Provider-route/OpenProse migrations; memory consolidation and scoped skill self-learning defaults; persistent sessions without configured reset; model restrictions separated from aliases/settings | Inventory effective retention, learning, provider ownership, and explicit allowlists before migration. A renamed route must not erase policy intent. |
+| [v2026.8.2](https://github.com/openclaw/openclaw/releases/tag/v2026.8.2), published September 1 | Same-agent session visibility default; destructive cleanup of retained migration originals; MCP input-size and workspace-policy fixes | Test per-person privacy even within one agent. Separate reversible upgrade from irreversible cleanup. |
+| [v2026.9.1](https://github.com/openclaw/openclaw/releases/tag/v2026.9.1), published September 3 | Identity-scoped skill libraries, reusable MCP approval behavior, credential-migration recovery, closed-authority enforcement, retry ownership, and reported-versus-delivered completion fixes | Bind approvals and skills to the real principal; distinguish accepted, completed, delivered, and acknowledged states. Test late writes and duplicate delivery. |
+
+Version-pinned source-document spot check: [v2026.8.2 session tools](https://github.com/openclaw/openclaw/blob/v2026.8.2/docs/concepts/session-tool.md) specifies `agent`; [v2026.9.2 session tools](https://github.com/openclaw/openclaw/blob/v2026.9.2/docs/concepts/session-tool.md) specifies `all`. Both retain the `tree` main-session exception. This is documentation evidence, not executed enforcement. It prevents incorrectly assigning September defaults to August releases.
+
+The v2026.8.2 known-issues section reports an optional vulnerable image dependency in a standalone memory plugin. It describes the text path as not loading that adapter, not the package as vulnerability-free. Current resolution needs an exact package/dependency and reachability audit; no fixed version is inferred here. SDK migration also records helpers with no modern public replacement: deprecation does not imply a drop-in substitute. Use the [official migration map](https://docs.openclaw.ai/plugins/sdk-migration), pinned to the evaluated package before accepting compatibility.
+
+The [memory provenance guide](https://docs.openclaw.ai/concepts/memory-provenance), read September 7, distinguishes prospective admission exclusion from removal of attributable derived entries. Original transcripts, untracked edits, external copies, and other stores can remain. An empty preview is not universal-erasure proof. LAB-C3 now tests these boundaries with synthetic records rather than asking learners to run a destructive command.
+
+Remaining research is targeted: implementation and regression evidence for effective visibility, changed approval lifetimes, migration conflict preservation, and optional dependency reachability. Stop broad release scraping; do not reread unchanged advisory metadata to create an appearance of progress. The reviewed baseline remains unchanged until the migration gate is justified.
 
 ### Other Cases
 

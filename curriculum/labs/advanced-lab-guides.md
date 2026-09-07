@@ -88,6 +88,20 @@ Implement a memory interface with write policy, provenance, retrieval, retention
 
 Report benefit, contamination rate, privacy boundary, deletion evidence, failure behavior, and residual risk. Pass only if the system treats retrieved text as untrusted data and does not silently cross isolation boundaries.
 
+### Worked Deletion-Boundary Exercise
+
+Use synthetic sessions S1 and S2, source transcripts, a derived fact from each, a merged fact with both origins, a retrieval index/cache, and an explicitly labeled external export. Write the expected retention/deletion policy before implementing the exercise.
+
+1. Exclude future S1 ingestion. Verify a pre-existing S1 fact does not disappear merely because admission is now denied.
+2. Remove S1-attributable derived data under the declared policy. Decide explicitly whether the mixed-origin fact is removed whole or safely recomputed from S2; inspect the outcome, not just a count.
+3. Pause publication after an index worker reads S1, perform deletion, then resume it. A stale worker must not republish forgotten content. Use a version or tombstone check at commit, not just at query time.
+4. Inject failure midway through cleanup and retry. Preserve provenance needed for repair and report incomplete stores. Repeating the operation must not reintroduce data or delete unrelated S2 facts.
+5. Check the transcript and external export separately. If outside the chosen deletion contract, list them as retained; if the requirement includes them, implement and verify that lifecycle too.
+
+Instructor key: admission, retention, lineage, retrieval visibility, and erasure are different controls. A query returning zero hits can mean broken indexing or insufficient permission. Include an allowed S2 retrieval control and direct authorized store inspection. A simulated race proves only the simulation; durable concurrent-worker evidence is still required for a production claim.
+
+OpenClaw is a dated comparison, not the required implementation. Consult the [source ledger](../sources/validation-register.md#intermediate-release-triage-2026-09-07) for its documented deletion limits. Do not use real personal data or run deletion on the user's installed agent.
+
 ## LAB-C4: MCP Integration and Contract Test
 
 ### Objective

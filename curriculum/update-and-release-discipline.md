@@ -65,3 +65,11 @@ Worked answer fragment: a late approval must not authorize already closed work. 
 Assess the learner on finding hidden authority/data changes and proposing discriminating tests. Do not award credit for copying release highlights. Freeze existing graded environments until migration and fairness evidence is accepted; an old pin is reproducible, not automatically secure.
 
 Assess the learner's ability to verify, migrate, test, and communicate change. Do not assess current defaults as timeless facts.
+
+### Irreversible Cleanup Gate
+
+The [intermediate-release ledger](sources/validation-register.md#intermediate-release-triage-2026-09-07) includes a product cleanup path that removes retained migration originals. Treat this as a separate change decision, not the final line of a routine upgrade script.
+
+In a disposable synthetic migration exercise, preserve an old schema snapshot, migrate a copy, change data in the new system, and rehearse restore into a fresh target. Record which new writes rollback would lose and how reconciliation would work. Refuse cleanup until the retained-artifact inventory, tested restore, retention decision, and loss boundary have an accountable owner. Never overwrite the sole original to test the backup.
+
+The instructor presents a conflicting active configuration and older last-known-good copy. Passing work preserves both, diagnoses the conflict, and justifies a merge or refusal instead of silently replacing newer user choices. A dry-run result must be refreshed when relevant state changes; it is not an immutable authorization.
