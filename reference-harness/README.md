@@ -20,6 +20,7 @@ It includes:
 - an optional, exact-version interoperability lane with real MCP discovery/tool validation, A2A JSON-RPC task/artifact exchange plus an authentication boundary, and in-memory OpenTelemetry spans with sensitive content omitted
 - repeated-trial evaluation with per-task thresholds and critical-failure release gates
 - explicit evaluation-infrastructure failures that veto release even under permissive score thresholds, while retaining available runs for diagnosis
+- a versioned 20-task synthetic contract corpus with final-state/trace grading, duplicate and split checks, per-task timing, and a separate Wilson interval math exercise
 
 It intentionally does **not** claim production readiness. It does not provide process isolation, handler timeouts, preemptive cancellation during a call, network egress control, cryptographic identity, full event/log redaction, full JSON Schema, or a network model client. The durable-task fixture is a single-host SQLite teaching model: it has no queue service, worker heartbeat, distributed consensus/lease guarantee, real process-kill harness, or exactly-once external-effect guarantee. Memory is in-process lexical retrieval and fan-out is sequential. The optional interoperability proofs use in-process MCP, in-process ASGI for A2A, and an in-memory OpenTelemetry exporter. They do not prove external network transport, TLS/OAuth, resilient protocol retries, an OTLP backend, SLO operation, protocol certification, or stable GenAI-convention compliance.
 
@@ -49,3 +50,13 @@ PYTHONPATH=src python -m unittest discover -s tests -p test_security.py -v
 ```
 
 The tests use synthetic documents, in-memory effects, and `.invalid` destination strings without network requests. A scripted provider deliberately emits malicious calls: this measures authorization behavior after assumed model compromise, not actual model susceptibility or an attack-success rate. Follow [LAB-C6](../curriculum/labs/advanced-lab-guides.md#lab-c6-agentic-attack-and-mitigation) for the exploit/control comparison, learner extensions, and assessment gate.
+
+Run the LAB-C7 corpus from this directory with `PYTHONPATH=src` set:
+
+```bash
+python -m agent_harness.corpus evaluation-corpus.json --candidate-revision YOUR_GIT_COMMIT
+```
+
+Replace the revision label with the actual commit and retain any dirty diff. The command prints a JSON evidence report and exits nonzero for failed contracts. It does not write files unless the caller redirects stdout. The report retains corpus hash, Python/platform, per-family results, elapsed fixture/setup/run/grade time, messages, correlated events, final inventory, and read/write journals. It contains synthetic data only. `run_corpus(..., candidate=...)` accepts a compatible harness factory for learner implementations; expected answers are not passed to that factory. In-process candidates remain trusted Python code, so this is not tamper-resistant assessment of hostile code.
+
+The 10 development and 10 public challenge tasks cover six declared families. Validation rejects duplicate IDs, normalized prompts, executable scenarios (including renamed call IDs and explicit defaults), cross-split declared families, unknown fields/events, and malformed expected results. It does not detect arbitrary semantic paraphrases, source overlap, training contamination, or exposure of public challenge answers. Grading is exact for these contracts and can penalize valid alternative wording/behavior outside their scope. An assessor must supply fresh tasks for independent assessment. Timing is local execution cost evidence, not provider latency; provider cost and confidence interval are deliberately `null`. See [LAB-C7](../curriculum/labs/advanced-lab-guides.md#lab-c7-evaluation-corpus-and-regression-gate) for generalization limits and learner extensions.

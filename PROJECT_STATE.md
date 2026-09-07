@@ -61,6 +61,8 @@ User study environment:
 
 ## Current Baseline
 
+2026-09-07 maintained corpus milestone: the reference harness now includes a versioned 20-task deterministic contract corpus across six families, 10 development/10 public challenge tasks, a strict runner with trace plus independent fixture-state grading, corpus hashing, duplicate/split checks, measured local execution times, and a separately tested Wilson interval exercise. All 63 exact-dependency tests passed on Windows Python 3.13.1 in 9.081 seconds, and the CLI passed 20/20 contracts. Ruff, MyPy (20 source/test files), Bandit on source, and whitespace checks passed. LAB-C7 now includes runnable instructions, attack/mutation controls, leakage limits, uncertainty assumptions, source rationale, and required real-workload extensions. This closes the absence of a maintained bounded contract corpus, but does not establish representative model evaluation, independent grader calibration, general leakage detection, or learning effectiveness. Clean WSL validation of this milestone remains pending; prior 50-test clean evidence below remains historical.
+
 Clean security validation recorded 2026-09-06: commit `b2a0221` passed all 48 tests from a fresh WSL Git archive, with CPython 3.13.9 and the committed optional-dependency lock. Test time was 6.949 seconds, excluding downloads/setup; three known A2A protobuf warnings remain. This supersedes the worktree-only security checkpoint below. It is author-executed evidence, not independent lab reproduction.
 
 Evaluator repair `1423d88` validated on Windows and WSL: a pre-fix reproducer returned `approved=True` after a factory exception when both rate thresholds were zero. `testing.py` now distinguishes infrastructure failure and applies an unconditional veto, preserving runs when a grader fails. LAB-C7 now teaches this distinction and specifies corpus provenance, final-state grading, held-out families, dependence assumptions, exclusions, and measured latency/cost evidence. All 50 exact-dependency tests passed on Windows in 2.952 seconds; Ruff, MyPy (19 source/test files), Bandit on source, and Git whitespace checks passed. A fresh Git archive of `1423d88` passed all 50 tests in WSL Python 3.13.9 in 12.421 seconds using `uv run --offline --python 3.13 --extra interop --locked python -m unittest discover -s tests -v`. The temporary directory was `/tmp/harness-1423d88.7iofeT`; three known upstream A2A warnings remained. A maintained representative corpus and validated graders remain unfinished.
@@ -225,7 +227,7 @@ No completion percentage overrides a failed gate.
 
 1. Keep `../elite-mentor-os` frozen until the user explicitly resumes that product.
 2. Reproduce the critical lab path independently and preserve environment, command, output, failure, timing, and assessor evidence.
-3. Build the maintained evaluation corpus and uncertainty/leakage checks required by LAB-C7. The authorization and evaluator fixtures' clean WSL runs are complete; extend security into actual memory/persistence and process/network boundaries before stronger security claims.
+3. Complete clean validation of the 20-task contract corpus, then add realistic task/provider evaluation, manually reviewed grader/leakage evidence, and actual memory/persistence and process/network security boundaries. The maintained deterministic corpus is a starting fixture, not a production benchmark.
 4. Run accessibility and assessor-calibration audits, then repair findings.
 5. Seek independent review and pilot evidence only after the internal blockers are materially reduced.
 

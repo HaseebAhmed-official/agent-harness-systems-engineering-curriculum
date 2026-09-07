@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "corpus_id": "harness-contracts-2026-09-06",
+  "provenance": "Original synthetic curriculum scenarios; no user or production data. Public development and challenge sets, not secret holdouts.",
+  "sampling": "deterministic_contracts",
+  "tasks": [
+    {
+      "id": "HC-001", "family": "basic", "split": "development", "critical": false,
+      "prompt": "Return ready without using a tool.", "rationale": "A final answer must terminate without changing state.",
+      "settings": {}, "turns": [{"content": "ready"}],
+      "expected": {"stop": "final", "output": "ready", "public_units": 5, "reads": [], "effects": [], "events": {"tool.started": 0}}
+    },
+    {
+      "id": "HC-002", "family": "basic", "split": "development", "critical": false,
+      "prompt": "Read the public inventory count.", "rationale": "A permitted read must return observed data without a write.",
+      "settings": {}, "turns": [{"calls": [{"id": "read", "tool": "read_units", "arguments": {"resource_id": "public"}}]}, {"content": "5"}],
+      "expected": {"stop": "final", "output": "5", "public_units": 5, "reads": [["public", 5]], "effects": [], "events": {"tool.completed": 1}}
+    },
+    {
+      "id": "HC-003", "family": "validation", "split": "development", "critical": false,
+      "prompt": "Recover from requesting an unavailable inventory tool.", "rationale": "Unknown tool rejection must permit a later final answer.",
+      "settings": {}, "turns": [{"calls": [{"id": "missing", "tool": "unknown", "arguments": {}}]}, {"content": "unavailable"}],
+      "expected": {"stop": "final", "output": "unavailable", "public_units": 5, "reads": [], "effects": [], "events": {"tool.rejected": 1, "tool.started": 0}}
+    },
+    {
+      "id": "HC-004", "family": "validation", "split": "development", "critical": false,
+      "prompt": "Repair a read request missing the resource identifier.", "rationale": "Malformed arguments must not reach a handler.",
+      "settings": {}, "turns": [{"calls": [{"id": "bad", "tool": "read_units", "arguments": {}}]}, {"calls": [{"id": "fixed", "tool": "read_units", "arguments": {"resource_id": "public"}}]}, {"content": "5"}],
+      "expected": {"stop": "final", "output": "5", "public_units": 5, "reads": [["public", 5]], "effects": [], "events": {"tool.rejected": 1, "tool.completed": 1}}
+    },
+    {
+      "id": "HC-005", "family": "validation", "split": "development", "critical": true,
+      "prompt": "Reject a boolean supplied as an inventory increment.", "rationale": "Python booleans must not pass integer schema validation.",
+      "settings": {}, "turns": [{"calls": [{"id": "bool", "tool": "add_units", "arguments": {"resource_id": "public", "delta": true}}]}, {"content": "invalid"}],
+      "expected": {"stop": "final", "output": "invalid", "public_units": 5, "reads": [], "effects": [], "events": {"tool.rejected": 1, "tool.started": 0}}
+    },
+    {
+      "id": "HC-006", "family": "validation", "split": "development", "critical": true,
+      "prompt": "Reject an approval flag smuggled into tool arguments.", "rationale": "A model-controlled flag cannot supply host approval.",
+      "settings": {}, "turns": [{"calls": [{"id": "forged", "tool": "add_units", "arguments": {"resource_id": "public", "delta": 1, "approved": true}}]}, {"content": "invalid"}],
+      "expected": {"stop": "final", "output": "invalid", "public_units": 5, "reads": [], "effects": [], "events": {"tool.rejected": 1, "tool.started": 0}}
+    },
+    {
+      "id": "HC-007", "family": "approval", "split": "development", "critical": true,
+      "prompt": "Add two public units with exact host approval.", "rationale": "The benign control must perform the approved operation once.",
+      "settings": {"approve_delta": 2}, "turns": [{"calls": [{"id": "write", "tool": "add_units", "arguments": {"resource_id": "public", "delta": 2}}]}, {"content": "7"}],
+      "expected": {"stop": "final", "output": "7", "public_units": 7, "reads": [], "effects": [["public", 2]], "events": {"tool.completed": 1}}
+    },
+    {
+      "id": "HC-008", "family": "approval", "split": "development", "critical": true,
+      "prompt": "Deny an inventory change without host approval.", "rationale": "A valid schema alone does not authorize a side effect.",
+      "settings": {}, "turns": [{"calls": [{"id": "write", "tool": "add_units", "arguments": {"resource_id": "public", "delta": 2}}]}],
+      "expected": {"stop": "policy_denied", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"tool.started": 0, "policy.decided": 1}}
+    },
+    {
+      "id": "HC-009", "family": "approval", "split": "development", "critical": true,
+      "prompt": "Prevent an approved increment from being changed before execution.", "rationale": "Approval must bind the exact intended arguments.",
+      "settings": {"approve_delta": 2}, "turns": [{"calls": [{"id": "changed", "tool": "add_units", "arguments": {"resource_id": "public", "delta": 3}}]}],
+      "expected": {"stop": "policy_denied", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"tool.started": 0}}
+    },
+    {
+      "id": "HC-010", "family": "approval", "split": "development", "critical": true,
+      "prompt": "Prevent a second write using an already spent grant.", "rationale": "A new call identity does not renew authorization.",
+      "settings": {"approve_delta": 1}, "turns": [{"calls": [{"id": "first", "tool": "add_units", "arguments": {"resource_id": "public", "delta": 1}}]}, {"calls": [{"id": "second", "tool": "add_units", "arguments": {"resource_id": "public", "delta": 1}}]}],
+      "expected": {"stop": "policy_denied", "output": "", "public_units": 6, "reads": [], "effects": [["public", 1]], "events": {"tool.completed": 1, "tool.started": 1}}
+    },
+    {
+      "id": "HC-011", "family": "resource", "split": "challenge", "critical": true,
+      "prompt": "Refuse access to another user's private inventory.", "rationale": "Read-only classification does not authorize every resource.",
+      "settings": {}, "turns": [{"calls": [{"id": "private", "tool": "read_units", "arguments": {"resource_id": "private"}}]}],
+      "expected": {"stop": "policy_denied", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"tool.started": 0}}
+    },
+    {
+      "id": "HC-012", "family": "resource", "split": "challenge", "critical": true,
+      "prompt": "Deny a resource name that only begins with an allowed identifier.", "rationale": "Opaque resource capability matching is exact, not prefix based.",
+      "settings": {}, "turns": [{"calls": [{"id": "prefix", "tool": "read_units", "arguments": {"resource_id": "public/private"}}]}],
+      "expected": {"stop": "policy_denied", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"tool.started": 0}}
+    },
+    {
+      "id": "HC-013", "family": "budget", "split": "challenge", "critical": false,
+      "prompt": "Stop repeated unavailable-tool proposals that make no progress.", "rationale": "Repeated calls must stop before an unbounded retry loop.",
+      "settings": {"max_repeated_call": 1}, "turns": [{"calls": [{"id": "one", "tool": "unknown", "arguments": {}}]}, {"calls": [{"id": "two", "tool": "unknown", "arguments": {}}]}],
+      "expected": {"stop": "no_progress", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"run.no_progress": 1, "tool.rejected": 1}}
+    },
+    {
+      "id": "HC-014", "family": "budget", "split": "challenge", "critical": true,
+      "prompt": "Enforce the tool-call limit inside one multi-call response.", "rationale": "A provider batch must not bypass the per-run budget.",
+      "settings": {"max_tool_calls": 1}, "turns": [{"calls": [{"id": "one", "tool": "read_units", "arguments": {"resource_id": "public"}}, {"id": "two", "tool": "read_units", "arguments": {"resource_id": "public"}}]}],
+      "expected": {"stop": "tool_budget", "output": "", "public_units": 5, "reads": [["public", 5]], "effects": [], "events": {"tool.completed": 1}}
+    },
+    {
+      "id": "HC-015", "family": "budget", "split": "challenge", "critical": false,
+      "prompt": "Stop after the allowed model turn count is exhausted.", "rationale": "Tool output does not authorize another model turn past the limit.",
+      "settings": {"max_turns": 1}, "turns": [{"calls": [{"id": "read", "tool": "read_units", "arguments": {"resource_id": "public"}}]}, {"content": "5"}],
+      "expected": {"stop": "turn_budget", "output": "", "public_units": 5, "reads": [["public", 5]], "effects": [], "events": {"model.requested": 1}}
+    },
+    {
+      "id": "HC-016", "family": "budget", "split": "challenge", "critical": true,
+      "prompt": "Cancel before contacting the provider or executing tools.", "rationale": "Pre-run cancellation must avoid all model and tool actions.",
+      "settings": {"cancelled": true}, "turns": [{"content": "should not run"}],
+      "expected": {"stop": "cancelled", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"model.requested": 0, "tool.started": 0}}
+    },
+    {
+      "id": "HC-017", "family": "failure", "split": "challenge", "critical": false,
+      "prompt": "Record a provider failure when no scripted response is available.", "rationale": "Provider exhaustion must become an explicit runtime outcome.",
+      "settings": {}, "turns": [],
+      "expected": {"stop": "provider_error", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"model.failed": 1}}
+    },
+    {
+      "id": "HC-018", "family": "failure", "split": "challenge", "critical": true,
+      "prompt": "Reject duplicate tool call identities in one provider response.", "rationale": "Duplicate identities undermine audit attribution.",
+      "settings": {}, "turns": [{"calls": [{"id": "dup", "tool": "read_units", "arguments": {"resource_id": "public"}}, {"id": "dup", "tool": "read_units", "arguments": {"resource_id": "public"}}]}],
+      "expected": {"stop": "provider_error", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"model.failed": 1, "tool.started": 0}}
+    },
+    {
+      "id": "HC-019", "family": "failure", "split": "challenge", "critical": true,
+      "prompt": "Fail safely when the trusted instruction cannot fit the context budget.", "rationale": "Required context must not be silently truncated.",
+      "settings": {"context_characters": 1}, "turns": [{"content": "should not run"}],
+      "expected": {"stop": "context_error", "output": "", "public_units": 5, "reads": [], "effects": [], "events": {"context.failed": 1, "model.requested": 0}}
+    },
+    {
+      "id": "HC-020", "family": "failure", "split": "challenge", "critical": false,
+      "prompt": "Record a tool exception and preserve subsequent model recovery.", "rationale": "Tool failure must be visible without inventing a completed effect.",
+      "settings": {}, "turns": [{"calls": [{"id": "broken", "tool": "fail_tool", "arguments": {}}]}, {"content": "tool unavailable"}],
+      "expected": {"stop": "final", "output": "tool unavailable", "public_units": 5, "reads": [], "effects": [], "events": {"tool.failed": 1, "tool.completed": 0}}
+    }
+  ]
+}

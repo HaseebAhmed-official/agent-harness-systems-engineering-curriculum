@@ -43,6 +43,10 @@ Track the evidence class and claim boundary for curriculum-wide claims. Product-
 
 ## Product Baselines
 
+### LAB-C7 Corpus and Statistics Evidence (2026-09-06)
+
+The original synthetic `harness-contracts-2026-09-06` corpus contains 20 fixed harness-contract tasks, not a population sample or model benchmark. [Anthropic evaluation guidance](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents), opened 2026-09-06, supports distinguishing tasks/trials/graders, traces, and final outcomes. [NIST proportion interval guidance](https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm) and its [Wilson formula](https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/propconf.htm) support the separate statistical calculation exercise. The automatic corpus report withholds confidence intervals because the tasks are fixed deterministic cases. Known-value and boundary tests check the calculation; no interval proves independence, representative sampling, model quality, or classroom effectiveness. Revalidate when corpus population, sampling design, grader semantics, or statistical method changes. See LAB-C7 for primary-source scope, manual leakage review, and missing evidence.
+
 ### OpenClaw
 
 The existing release/advisory baseline is preserved in:

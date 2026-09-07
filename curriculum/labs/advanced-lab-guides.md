@@ -220,6 +220,39 @@ The example distinguishes an ordinary failing task from an evaluation infrastruc
 
 The existing five evaluator test methods are regression examples, not a representative task corpus or evidence of grader validity. LAB-C7 still requires the corpus, calibrated graders, uncertainty, leakage analysis, and cost/latency measurements below.
 
+### Maintained Contract Corpus
+
+The repository supplies `reference-harness/evaluation-corpus.json` and its runner `src/agent_harness/corpus.py`. These are original synthetic teaching cases, versioned as `harness-contracts-2026-09-06`. The initial state is public inventory 5, private inventory 9, and empty read/effect journals. Tools read inventory, increment it, or raise a controlled exception. No model subscription, real data, network service, or installation of OpenClaw is required.
+
+| IDs | Family | Split | Contract coverage |
+| --- | --- | --- | --- |
+| HC-001 to HC-002 | Basic | Development | final answer without actions; legitimate read |
+| HC-003 to HC-006 | Validation | Development | missing tool, missing argument repair, boolean/integer confusion, forged approval flag |
+| HC-007 to HC-010 | Approval | Development | approved write, missing approval, changed arguments, spent-grant replay |
+| HC-011 to HC-012 | Resource | Public challenge | private read denial, exact resource identifiers |
+| HC-013 to HC-016 | Budget | Public challenge | repeated-call stop, batched tool budget, turn budget, cancellation |
+| HC-017 to HC-020 | Failure | Public challenge | provider exhaustion, duplicate call identities, context overflow, tool error recovery |
+
+After setting `PYTHONPATH=src` from `reference-harness`, run:
+
+```bash
+python -m agent_harness.corpus evaluation-corpus.json --candidate-revision YOUR_GIT_COMMIT
+```
+
+The revision is caller-supplied provenance, not a verified attestation. Record the real commit and dirty diff. The runner prints JSON and exits 0 only when every declared contract passes. Redirect output to the learner evidence location if required. Retain failed rows; exceptions are infrastructure failures, never omitted trials. The report uses the corpus content hash, every task's expected-versus-observed predicate failures, separate inventory/read/effect state, full synthetic trace, elapsed time, and family denominators. Elapsed time includes fixture setup and grading and excludes environment installation.
+
+First reproduce 20/20 with the reference candidate. Next pass a learner factory through `run_corpus(..., candidate=...)`. It receives provider, registry, policy, and context-builder interfaces, not expected answers. Introduce one deliberately permissive policy and observe security failures; restore policy, then introduce a candidate that returns a convincing answer without performing the required state change. Both must fail the grader. The included tests also alter private state and event correlation to check grader sensitivity. These mutation checks establish only those observed failure detections, not exhaustive grader correctness.
+
+The validator checks duplicate task IDs, normalized identical prompts, equivalent executable scripts after normalizing call IDs/defaults, declared family overlap between splits, duplicate JSON keys, and malformed or unknown assertion fields. Keep duplicate identity patterns when normalizing scripts because repeated IDs are themselves a failure scenario. Invent a changed-ID duplicate and a zero-count misspelled event assertion and confirm validation rejects both before execution. Manually review paraphrases, shared source/templates, and contamination that these checks cannot discover. The challenge split is public and is not a secret or unexposed holdout.
+
+### Uncertainty Exercise
+
+The runner does **not** attach a confidence interval to 20 deterministic contracts. Running the same script 100 times does not create 100 independent observations of model capability. The separate `wilson_interval(successes, trials, confidence=0.95)` function demonstrates the binomial Wilson calculation: 5 successes in 10 trials gives approximately `[0.2366, 0.7634]`; 10 in 10 still has a lower bound below 1. This interval requires a justified sampling model and does not cover distribution shift, grader error, task leakage, or dependence.
+
+Learner task: explain why a pooled interval is inappropriate for this fixed heterogeneous corpus. Then design a small separate nondeterministic experiment with a declared population, independent sampling unit, failure taxonomy, repetition policy, and family reporting. Identify what would invalidate the independence assumption and how you would change the analysis. Actual model use must preserve provider/model configuration and measured usage; local scripted runtime cannot provide those measurements. No universal sample size or quality guarantee is implied.
+
+Research checked 2026-09-06: [Anthropic's agent evaluation guidance](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) distinguishes tasks, trials, graders, traces, and outcomes. [NIST's proportion confidence-interval guidance](https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm) and [Wilson formula reference](https://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/propconf.htm) support the statistical exercise. The corpus design is an original local implementation; these sources do not validate its representativeness. Research stopped after the scoped claims had primary support and executable checks; model-level effectiveness, grader calibration, and learner transfer remain separate evidence gaps.
+
 ### Corpus and Evidence Contract
 
 Keep the initial corpus in one versioned learner artifact with stable task IDs, task family, source/provenance, prompt, starting-state fixture, expected final-state predicates, allowed/forbidden actions, criticality, grading rule, and split. Record corpus hash, harness revision, model/provider configuration when applicable, trial identifiers, and the policy selected before examining held-out results.
