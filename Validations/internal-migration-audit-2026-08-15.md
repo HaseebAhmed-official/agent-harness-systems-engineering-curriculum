@@ -101,6 +101,14 @@ The full 24-test suite passed on Windows Python 3.11.9 and from a Git archive of
 
 The fixture is `executed`; LAB-C4, LAB-C5, and LAB-C8 remain `authored`. No second person reproduced the work. Updated planning estimates are approximately **76% artifact implementation**, **28% hands-on reproducibility evidence**, and **30% institution/enterprise proof**. The strong readiness verdicts remain rejected.
 
+## 2026-09-07 Teaching and Drift Addendum
+
+This remains author-session review. Semester 1 lessons 1-4 gained worked instruction, public keys, prediction tasks, guided/independent practice, remediation, and evidence limits. Both exact Markdown Python blocks ran on the existing Windows Python 3.13.1 environment: `final 5 [5]` and `no_progress cancelled provider_error`. Final-response checking is distinct from independently observed handler state. LAB-C6 prerequisite labels now correctly refer to B3 typed tools, B6 policy, and B5 sessions/events.
+
+The current implemented baseline is `9706d44`: 63 bounded tests and 20 synthetic corpus contracts passed on Windows and clean WSL, as recorded in the project checkpoint. This supersedes historical lower test totals, not the incomplete-readiness verdict.
+
+A targeted OpenClaw September review found material session-access and migration teaching impact. The validation register and maintenance review log record primary sources, the unchanged advisory metadata cutoff, and the unresolved intermediate-release/product-test scope. Latest observed is not fully reviewed. Expanded instruction and passing examples do not prove student learning, full delivery readiness, accessibility, assessor consistency, or enterprise safety. G7 and external-adoption gates remain incomplete.
+
 ## 2026-08-16 Durable Execution Addendum
 
 This addendum is also author-session evidence, not independent review. Implementation commit `a78f42a` added a standard-library SQLite durable-work starting fixture with an explicit state/version contract, atomic claims, per-claim lease-token fencing, bounded retry policy, idempotency-intent checks, cancellation, expired-lease recovery, quarantine, compensation/manual resolution, and an append-only application transition ledger.

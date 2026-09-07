@@ -3,7 +3,7 @@
   "last_reviewed_release": "v2026.7.1-2",
   "last_reviewed_npm_version": "2026.7.1-2",
   "last_reviewed_extended_stable_version": "2026.6.34",
-  "last_observed_beta_version": "2026.8.1-beta.2",
+  "last_observed_beta_version": "2026.9.1",
   "last_reviewed_date": "2026-08-15",
   "latest_advisory_published_at_review": "2026-06-30T01:11:32Z",
   "latest_advisory_updated_at_review": "2026-08-13T17:27:46Z",
@@ -11,7 +11,7 @@
   "advisory_review_window": "2026-04-25 through 2026-08-15",
   "new_advisories_reviewed": 112,
   "advisory_recording_policy": "last_reviewed_advisories lists representative curriculum-integrated cases; the full official feed was reviewed for the stated window",
-  "last_review_notes": "The full 2026-08-13 review covered stable GitHub/npm v2026.7.1-2, extended-stable 2026.6.34, the observed beta tag, official release/docs surfaces, and all 112 official advisories published after the prior 2026-04-24 cutoff. On 2026-08-15, an authenticated drift check found the same stable release; a metadata check observed 647 published advisories, no advisory updated after 2026-08-13T17:27:46Z, and no new publication after 2026-06-30T01:11:32Z. The 2026-08-15 check did not reread all 647 advisories.",
+  "last_review_notes": "Fully reviewed baseline remains v2026.7.1-2 dated 2026-08-15. Targeted 2026-09-07 review read v2026.9.2 grouped release notes and selected official session/security/channel/plugin-compatibility docs, integrating authority/privacy and migration regression teaching. GitHub latest/npm latest are v2026.9.2/2026.9.2; npm beta is 2026.9.1 and extended-stable is 2026.6.34. All 647 published advisory metadata records were compared with the saved cutoff; none updated later than 2026-08-13T17:27:46Z. Advisory bodies were not reread. Intermediate release changes, source-level confirmation, isolated product regressions, and independent security review remain pending. Latest observation is not a reviewed or cohort-approved baseline.",
   "last_reviewed_advisories": [
     "GHSA-xww8-gqvh-92x9",
     "GHSA-v6r2-jh58-xx6w",
@@ -40,5 +40,15 @@
     "curriculum/labs/advanced-lab-guides.md",
     "curriculum/templates/release-aware-note-template.md",
     "curriculum/assessment-map.md"
+  ],
+  "last_observed_release": "v2026.9.2",
+  "last_observed_npm_version": "2026.9.2",
+  "last_observed_date": "2026-09-07",
+  "last_advisory_metadata_check_date": "2026-09-07",
+  "release_review_status": "partial",
+  "pending_intermediate_release_reviews": [
+    "v2026.8.1",
+    "v2026.8.2",
+    "v2026.9.1"
   ]
 }

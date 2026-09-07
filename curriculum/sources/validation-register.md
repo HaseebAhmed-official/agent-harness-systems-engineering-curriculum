@@ -57,6 +57,18 @@ The existing release/advisory baseline is preserved in:
 
 OpenClaw facts in legacy files remain case-specific until migrated. Verify them before delivery.
 
+#### Targeted Drift Review: 2026-09-07
+
+Observed GitHub latest and npm latest are `v2026.9.2` / `2026.9.2` (release published September 5). npm beta is `2026.9.1`; extended-stable remains `2026.6.34`. These are observations, not approval to upgrade a cohort. The [channel contract](https://docs.openclaw.ai/install/development-channels) selects the newer of beta/latest for beta updates, so a beta dist-tag alone does not identify the resolved update.
+
+The [release notes](https://github.com/openclaw/openclaw/releases/tag/v2026.9.2) document default swarm orchestration and broader session access; recovery changes address overlapping reply markers, stale transcript writers, incomplete backups, and late approvals. Teach these as regression-test requirements, not proof that all crash/retry paths are safe.
+
+The [compatibility guide](https://docs.openclaw.ai/plugins/compatibility) deprecates untrusted-named channel-context aliases in favor of channel-named fields and `buildChannelMetadata`, with a September 8 boundary. The release says removal is eligible on or after that date, not that removal has already occurred. Renaming a field does not authenticate its content.
+
+The paginated [official advisory API](https://api.github.com/repos/openclaw/openclaw/security-advisories?per_page=100) returned 647 records, with no update later than the saved August 13 timestamp. This was a metadata comparison, not a reread or assurance of no vulnerabilities.
+
+Scope remains partial: the `v2026.8.1`, `v2026.8.2`, and `v2026.9.1` migration history, source-level confirmation, installed-version regression tests, and independent security review are pending. The fully reviewed baseline stays at `v2026.7.1-2`; latest observations are recorded separately. See the [security exercise](../governance-and-security-strand.md#openclaw-case-session-access-after-an-upgrade-2026-09-07).
+
 ### Other Cases
 
 Hermes Agent, ChatGPT Work, and xAI case-study claims currently have source-map entries but no complete local evidence ledger. They are `pending` for classroom delivery until dated claim tables and exercises are implemented.

@@ -12,6 +12,8 @@
 - protocol/specification version:
 - framework/SDK/runtime version:
 - product release/channel/account/region where relevant:
+- latest observed version versus fully reviewed teaching baseline:
+- intermediate releases or migration steps not yet reviewed:
 
 ## Primary Sources
 
@@ -31,6 +33,8 @@ Use `observed`, `documented`, `source-visible`, `inferred`, `unknown`, or `retir
 - changed defaults/authority/data behavior:
 - deprecations or compatibility risk:
 - affected tests, labs, assessments, and rollback:
+- synthetic allowed/denied controls for changed visibility or authority:
+- deprecation announced, removal eligible, or removal actually verified:
 
 ## Decision
 

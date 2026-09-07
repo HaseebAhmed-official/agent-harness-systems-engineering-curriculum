@@ -56,4 +56,12 @@ Stable, beta, preview, nightly, source-build, and package-only channels are case
 
 ## Teaching Rule
 
+### OpenClaw Migration Exercise (2026-09-07)
+
+Use the dated [validation entry](sources/validation-register.md#targeted-drift-review-2026-09-07), not an assumed current default. Compare the reviewed `v2026.7.1-2` baseline with observed `v2026.9.2`. List intermediate versions still awaiting review. Draft a change decision covering session access, concurrent delegation, restore integrity, and expiring approval ownership. For each, specify one invariant, failure injection, expected evidence, rollback boundary, and owner.
+
+Worked answer fragment: a late approval must not authorize already closed work. Test an allowed on-time approval and a delayed response after cancellation; inspect dispatched effects, not just UI status. A backup command's success is insufficient: restore a synthetic record with unusual bytes and verify exact contents, while a deliberately corrupt archive must fail visibly. These are proposed assessment cases, not product test results.
+
+Assess the learner on finding hidden authority/data changes and proposing discriminating tests. Do not award credit for copying release highlights. Freeze existing graded environments until migration and fairness evidence is accepted; an old pin is reproducible, not automatically secure.
+
 Assess the learner's ability to verify, migrate, test, and communicate change. Do not assess current defaults as timeless facts.

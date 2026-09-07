@@ -69,6 +69,14 @@ Evidence: control-evidence-owner map, review cadence, exception record, user-fac
 - state residual risk and decision owner
 - reject claims stronger than the observed boundary
 
+## OpenClaw Case: Session Access After an Upgrade (2026-09-07)
+
+The [session-tool documentation](https://docs.openclaw.ai/concepts/session-tool) now specifies `tools.sessions.visibility: "all"` by default, including cross-agent transcript access for unsandboxed sessions. `self` narrows access to the current session; `agent` is same-agent scope, not necessarily same-person scope. Tool policy, sandbox constraints, and other access rules still apply. The [security contract](https://docs.openclaw.ai/gateway/security) supports a trusted operator or mutually trusting team, not hostile tenants sharing one gateway. Use separate gateway/credential and preferably OS/host boundaries for adversarial users.
+
+Apply this case to LAB-B6 and LAB-C6 without requiring a live OpenClaw install. In a disposable fixture, create sessions A and B containing distinct fake canaries. Before running, predict listing, search, history, send, and status results for each caller under broad and narrow policy. Include an allowed own-session control, denied cross-session control, and a spawned-child case. Record effective policy, returned metadata, and observed data/effects; a denial message alone is insufficient. No real student records or credentials.
+
+Instructor key: routing identity, display ownership, and isolation are separate concepts. Search snippets and metadata can leak even when full history is denied. A successful allowed control is needed to distinguish enforced denial from broken tooling. An in-process simulation proves only its own contract. Product claims require the same matrix on an isolated, pinned product version with configuration captured; that execution remains pending.
+
 ## Program Gate
 
 No learner passes the core or capstone with an unresolved critical security/privacy failure, hidden authority, unsafe experiment, fabricated evidence, or inability to explain the trust boundary. Points elsewhere cannot compensate.

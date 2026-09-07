@@ -65,6 +65,16 @@
 - Evidence boundary: the 112 advisories published after the previous cutoff were reviewed in the 2026-08-13 pass; the 2026-08-15 metadata check did not reread the entire 647-record feed, and no authored lab was promoted to independently reproduced
 - Follow-up: reproduce critical labs in clean learner environments, implement pinned protocol/provider/telemetry examples where justified, run accessibility and assessor calibration audits, then obtain independent academic, practitioner, and security review
 
+## 2026-09-07 Targeted Release and Teaching Review
+
+- Observed GitHub latest `v2026.9.2`, published `2026-09-05T20:00:07Z`; npm latest `2026.9.2`, beta `2026.9.1`, extended-stable `2026.6.34`. Read grouped release notes, not every contribution/PR. The intervening `v2026.8.1`, `v2026.8.2`, and `v2026.9.1` release migration reviews remain pending.
+- Primary docs checked: session tools, gateway security, plugin compatibility, and release channels. Material changes were mapped to session privacy/authority controls, default concurrency, late approvals, recovery/restore regression cases, and the September 8 SDK alias retirement boundary. Sources are linked in the validation register; moving documentation is distinguished from pinned behavior.
+- Paginated official advisory API: 647 metadata records, latest update still `2026-08-13T17:27:46Z`; no later updates found. No claim to reread bodies or prove absence of vulnerabilities.
+- Updated the validation register, security strand, release discipline, release-aware template, maintenance state, and both continuity files. Preserve the fully reviewed release/date; separate latest-observed fields keep incomplete migration work visible to the drift checker. No user OpenClaw installation was inspected or changed.
+- Also finished the interrupted lesson 1-4 teaching expansion and corrected LAB-C6 prerequisite IDs. The two exact Markdown Python examples executed successfully; these are author checks, not student outcomes.
+- Verification: both example outputs matched; changing the final answer to 999 caused the intended assertion failure. All four maintenance-script tests passed. Changed JSON parsed, three local Markdown links/anchors resolved, and Git whitespace checks passed. No runtime code changed and the historical 63-test result was not presented as a new execution.
+- Required follow-up: finish intermediate release/source review, isolated product regressions and independent security review; continue full teaching development and empirical learner/assessor/accessibility evidence. No readiness gate was promoted.
+
 ## Logging rule
 
 Every future upstream review should append:

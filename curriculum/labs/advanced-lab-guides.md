@@ -156,7 +156,7 @@ Select at least four scenarios spanning prompt injection, confused deputy, exfil
 
 ### Starting Exercise: Compromised Model, Bounded Authority
 
-Prerequisites: LAB-B2 tool validation, LAB-B5 policy, LAB-B6 event reconstruction, and a passing reference-harness base suite. Read `security.py` and `test_security.py` alongside the runtime's authorization-before-dispatch path. No paid model or external service is required. Use a disposable checkout, synthetic documents, and in-memory effects only.
+Prerequisites: LAB-B3 tool validation, LAB-B6 policy, LAB-B5 session/event reconstruction, and a passing reference-harness base suite. Read `security.py` and `test_security.py` alongside the runtime's authorization-before-dispatch path. No paid model or external service is required. Use a disposable checkout, synthetic documents, and in-memory effects only.
 
 Run from `reference-harness` in WSL/Linux:
 
