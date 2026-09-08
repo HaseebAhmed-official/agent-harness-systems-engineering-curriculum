@@ -101,6 +101,12 @@ The full 24-test suite passed on Windows Python 3.11.9 and from a Git archive of
 
 The fixture is `executed`; LAB-C4, LAB-C5, and LAB-C8 remain `authored`. No second person reproduced the work. Updated planning estimates are approximately **76% artifact implementation**, **28% hands-on reproducibility evidence**, and **30% institution/enterprise proof**. The strong readiness verdicts remain rejected.
 
+## 2026-09-08 Protocol and Security Teaching Checkpoint
+
+Semester 2 lessons 5-8 gained worked protocol traces, three executable examples, threat modeling, scoped-approval controls, remediation, and changed-task assessment. The exact Markdown MCP/A2A/scoped-policy examples passed on Windows Python 3.13.1; the 14 existing security tests passed in 0.022 seconds. Sixteen ordered week headings and eight ordered lesson headings were verified. A2A additionally emitted a dispatch-loop cancellation-without-EventQueue.close warning. Cleanup remains unverified; the successful assertions do not establish warning-free lifecycle behavior. No runtime source changed, full runtime suite or WSL lane was rerun, or independent reviewer/learner participated. The bounded samples do not complete LAB-C4/C5/C6.
+
+Permission transitions interrupted the authored work. The sandbox helper failed before command/file-edit startup; approved escalated shell execution and the apply_patch utility were used to complete validation and continuity. A temporary command typo in the virtualenv path was corrected. No status or percentage is promoted. Next investigate the A2A lifecycle warning, then expand lessons 9-16; retain all external teaching/adoption gates.
+
 ## 2026-09-07 Teaching and Drift Addendum
 
 Semester 2 structural checks: 16 ordered week headings, four ordered expanded lesson headings, all 10 local Markdown links/anchors across the eight changed files, and Git whitespace validation passed. No new files were added. This checks navigation and sample execution, not completeness of the remaining instruction.

@@ -43,6 +43,12 @@ Track the evidence class and claim boundary for curriculum-wide claims. Product-
 
 ## Product Baselines
 
+### Protocol and Authorization Lessons (2026-09-08)
+
+[MCP architecture 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28/architecture) and its [base protocol](https://modelcontextprotocol.io/specification/2026-07-28/basic) support the modern per-request version/capability teaching distinction. SDK 2.0.0's in-process example observed tool listing, typed result, malformed-input rejection, and local denial; it did not capture external transport or establish server authorization.
+
+[A2A specification](https://a2a-protocol.org/latest/specification/) still reported released 1.0.0 when checked, with major/minor protocol identity 1.0. The SDK 1.1.2 ASGI example observed a card response, completed task, echo artifact, and missing-bearer denial. Source inspection shows the client uses a preconstructed card rather than deserializing the fetched card; this does not prove remote discovery. A queue-close warning remains unresolved. [OWASP agent-security guidance](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html) supports untrusted-data and layered-control reasoning, not a guarantee that filters prevent arbitrary injection. Fourteen scripted security tests and the new scoped-approval example passed on Windows; actual model susceptibility, OS/network enforcement, and independent security review remain unproved.
+
 ### Semester 2 Production Foundations (2026-09-07)
 
 [Google SRE's Implementing SLOs](https://sre.google/workbook/implementing-slos/) supports user-oriented indicators, explicit measurement coverage, targets, and decision policies. The lesson's 99% target and counts are invented teaching inputs, not a recommended service target or measured performance. [Anthropic's effective-agent guidance](https://www.anthropic.com/engineering/building-effective-agents) supports a simpler baseline and distinguishes fixed workflows from model-directed control; the printed routing/sequential-fan-out example does not prove concurrent execution or model-quality improvement.
